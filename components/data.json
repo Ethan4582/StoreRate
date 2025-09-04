@@ -1,0 +1,167 @@
+[
+  {
+    "id": 1,
+    "storeName": "FreshMart Grocery",
+    "category": "Grocery",
+    "location": "Downtown, New York",
+    "rating": 4.7,
+    "reviews": 284,
+    "status": "Verified",
+    "owner": "John Smith",
+    "lastUpdated": "2023-10-15"
+  },
+  {
+    "id": 2,
+    "storeName": "TechGadgets",
+    "category": "Electronics",
+    "location": "Silicon Valley, CA",
+    "rating": 4.9,
+    "reviews": 512,
+    "status": "Verified",
+    "owner": "Sarah Johnson",
+    "lastUpdated": "2023-10-14"
+  },
+  {
+    "id": 3,
+    "storeName": "FashionHub Boutique",
+    "category": "Clothing",
+    "location": "Beverly Hills, CA",
+    "rating": 4.5,
+    "reviews": 187,
+    "status": "Pending",
+    "owner": "Michael Brown",
+    "lastUpdated": "2023-10-13"
+  },
+  {
+    "id": 4,
+    "storeName": "HomeEssentials",
+    "category": "Home Goods",
+    "location": "Seattle, WA",
+    "rating": 4.8,
+    "reviews": 346,
+    "status": "Verified",
+    "owner": "Emily Davis",
+    "lastUpdated": "2023-10-12"
+  },
+  {
+    "id": 5,
+    "storeName": "FitLife Gym",
+    "category": "Fitness",
+    "location": "Austin, TX",
+    "rating": 4.6,
+    "reviews": 423,
+    "status": "Verified",
+    "owner": "Robert Wilson",
+    "lastUpdated": "2023-10-11"
+  },
+  {
+    "id": 6,
+    "storeName": "BookNook",
+    "category": "Books",
+    "location": "Portland, OR",
+    "rating": 4.3,
+    "reviews": 156,
+    "status": "Needs Review",
+    "owner": "Jennifer Lee",
+    "lastUpdated": "2023-10-10"
+  },
+  {
+    "id": 7,
+    "storeName": "AutoCare Center",
+    "category": "Automotive",
+    "location": "Chicago, IL",
+    "rating": 4.2,
+    "reviews": 198,
+    "status": "Verified",
+    "owner": "David Miller",
+    "lastUpdated": "2023-10-09"
+  },
+  {
+    "id": 8,
+    "storeName": "PetParadise",
+    "category": "Pet Supplies",
+    "location": "Miami, FL",
+    "rating": 4.9,
+    "reviews": 267,
+    "status": "Verified",
+    "owner": "Maria Garcia",
+    "lastUpdated": "2023-10-08"
+  },
+  {
+    "id": 9,
+    "storeName": "GreenThumb Nursery",
+    "category": "Garden",
+    "location": "San Diego, CA",
+    "rating": 4.4,
+    "reviews": 134,
+    "status": "Pending",
+    "owner": "James Taylor",
+    "lastUpdated": "2023-10-07"
+  },
+  {
+    "id": 10,
+    "storeName": "TasteBuds Restaurant",
+    "category": "Food & Dining",
+    "location": "New Orleans, LA",
+    "rating": 4.7,
+    "reviews": 389,
+    "status": "Verified",
+    "owner": "Patricia Martin",
+    "lastUpdated": "2023-10-06"
+  },
+  {
+    "id": 11,
+    "storeName": "DigitalDreams",
+    "category": "Electronics",
+    "location": "Boston, MA",
+    "rating": 4.1,
+    "reviews": 95,
+    "status": "Needs Review",
+    "owner": "Christopher Clark",
+    "lastUpdated": "2023-10-05"
+  },
+  {
+    "id": 12,
+    "storeName": "StyleStudio",
+    "category": "Clothing",
+    "location": "Los Angeles, CA",
+    "rating": 4.6,
+    "reviews": 312,
+    "status": "Verified",
+    "owner": "Jessica Rodriguez",
+    "lastUpdated": "2023-10-04"
+  },
+  {
+    "id": 13,
+    "storeName": "HealthyBites",
+    "category": "Grocery",
+    "location": "Denver, CO",
+    "rating": 4.8,
+    "reviews": 245,
+    "status": "Verified",
+    "owner": "Thomas Lewis",
+    "lastUpdated": "2023-10-03"
+  },
+  {
+    "id": 14,
+    "storeName": "GameZone",
+    "category": "Entertainment",
+    "location": "Las Vegas, NV",
+    "rating": 4.0,
+    "reviews": 178,
+    "status": "Pending",
+    "owner": "Richard Walker",
+    "lastUpdated": "2023-10-02"
+  },
+  {
+    "id": 15,
+    "storeName": "OfficePro",
+    "category": "Office Supplies",
+    "location": "Atlanta, GA",
+    "rating": 4.5,
+    "reviews": 201,
+    "status": "Verified",
+    "owner": "Susan Young",
+    "lastUpdated": "2023-10-01"
+  }
+]

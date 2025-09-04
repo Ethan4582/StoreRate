@@ -1,0 +1,67 @@
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id           Int      @id @default(autoincrement())
+  email        String   @unique
+  passwordHash String   @map("password_hash")
+  name         String
+  role         Role
+  createdAt    DateTime @default(now()) @map("created_at")
+  updatedAt    DateTime @updatedAt @map("updated_at")
+
+  
+  stores  Store[]
+  ratings Rating[]
+
+  @@map("users")
+}
+
+model Store {
+  id          Int      @id @default(autoincrement())
+  name        String
+  description String?
+  address     String
+  phone       String?
+  email       String?
+  website     String?
+  ownerId     Int      @map("owner_id")
+  createdAt   DateTime @default(now()) @map("created_at")
+  updatedAt   DateTime @updatedAt @map("updated_at")
+   image       String?  
+
+  owner   User     @relation(fields: [ownerId], references: [id], onDelete: Cascade)
+  ratings Rating[]
+
+  @@map("stores")
+}
+
+model Rating {
+  id        Int      @id @default(autoincrement())
+  userId    Int      @map("user_id")
+  storeId   Int      @map("store_id")
+  rating    Int
+  review    String?
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+
+  user  User  @relation(fields: [userId], references: [id], onDelete: Cascade)
+  store Store @relation(fields: [storeId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, storeId])
+  @@map("ratings")
+}
+
+enum Role {
+  system_admin
+  normal_user
+  store_owner
+}
