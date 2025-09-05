@@ -29,7 +29,7 @@ export function middleware(request: NextRequest) {
       (pathname.startsWith("/admin") || pathname.startsWith("/dashboard")) &&
       user.role !== "system_admin"
     ) {
-      return NextResponse.redirect(new URL("/", request.url))
+      return NextResponse.redirect(new URL("/stores", request.url))
     }
 
     if (pathname.startsWith("/store-owner") && user.role !== "store_owner") {

@@ -79,6 +79,14 @@ export function Navbar({ user }: NavbarProps) {
   const getNavigationLinks = () => {
     if (!user) return []
 
+    if (user.role === "store_owner") {
+      return [
+        { href: "/store-owner/reviews", label: "Reviews" },
+        { href: "/store-owner/stores", label: "My Stores" },
+        { href: "/stores", label: "Browse Stores" }
+      ]
+    }
+
     const baseLinks = [
       { href: "/dashboard", label: "Dashboard" }
     ]
@@ -88,13 +96,6 @@ export function Navbar({ user }: NavbarProps) {
         return [
           ...baseLinks,
           { href: "/admin", label: "Admin Panel" },
-          { href: "/stores", label: "Browse Stores" }
-        ]
-      case "store_owner":
-        return [
-          ...baseLinks,
-          { href: "/store-owner/reviews", label: "Reviews" },
-          { href: "/store-owner/stores", label: "My Stores" },
           { href: "/stores", label: "Browse Stores" }
         ]
       case "normal_user":

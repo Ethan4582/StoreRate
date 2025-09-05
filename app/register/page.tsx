@@ -11,6 +11,7 @@ import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { Alert, AlertDescription } from "@/components/ui/alert"
+import { Eye, EyeOff } from "lucide-react"
 
 export default function RegisterPage() {
   const [formData, setFormData] = useState({
@@ -22,13 +23,14 @@ export default function RegisterPage() {
   })
   const [error, setError] = useState("")
   const [loading, setLoading] = useState(false)
+  const [showPassword, setShowPassword] = useState(false)
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false)
   const router = useRouter()
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     setLoading(true)
     setError("")
-
 
     if (formData.password !== formData.confirmPassword) {
       setError("Passwords do not match")
@@ -57,7 +59,16 @@ export default function RegisterPage() {
       const data = await response.json()
 
       if (response.ok) {
-        router.push("/stores")
+      
+        if (formData.role === "normal_user") {
+          router.push("/stores")
+        } else if (formData.role === "system_admin") {
+          router.push("/admin")
+        } else if (formData.role === "store_owner") {
+          router.push("/store-owner/stores")
+        } else {
+          router.push("/")
+        }
       } else {
         setError(data.error || "Registration failed")
       }
@@ -115,32 +126,49 @@ export default function RegisterPage() {
                 <SelectContent>
                   <SelectItem value="normal_user">Customer</SelectItem>
                   <SelectItem value="store_owner">Store Owner</SelectItem>
+                  {/* <SelectItem value="system_admin">Admin</SelectItem> */}
                 </SelectContent>
               </Select>
             </div>
 
-            <div className="space-y-2">
+            <div className="space-y-2 relative">
               <Label htmlFor="password">Password</Label>
               <Input
                 id="password"
-                type="password"
+                type={showPassword ? "text" : "password"}
                 value={formData.password}
                 onChange={(e) => setFormData({ ...formData, password: e.target.value })}
                 required
                 placeholder="Enter your password"
               />
+              <button
+                type="button"
+                className="absolute right-3 top-9 text-muted-foreground"
+                tabIndex={-1}
+                onClick={() => setShowPassword((v) => !v)}
+              >
+                {showPassword ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
+              </button>
             </div>
 
-            <div className="space-y-2">
+            <div className="space-y-2 relative">
               <Label htmlFor="confirmPassword">Confirm Password</Label>
               <Input
                 id="confirmPassword"
-                type="password"
+                type={showConfirmPassword ? "text" : "password"}
                 value={formData.confirmPassword}
                 onChange={(e) => setFormData({ ...formData, confirmPassword: e.target.value })}
                 required
                 placeholder="Confirm your password"
               />
+              <button
+                type="button"
+                className="absolute right-3 top-9 text-muted-foreground"
+                tabIndex={-1}
+                onClick={() => setShowConfirmPassword((v) => !v)}
+              >
+                {showConfirmPassword ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
+              </button>
             </div>
 
             <Button type="submit" className="w-full" disabled={loading}>
