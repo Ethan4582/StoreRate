@@ -35,17 +35,8 @@ export default function LoginPage() {
       const data = await response.json()
 
       if (response.ok) {
+          localStorage.setItem("user", JSON.stringify(data.user))
           router.push(data.redirect || "/")
-       
-        // if (data.role === "normal_user") {
-        //   router.push("/stores")
-        // } else if (data.role === "system_admin") {
-        //   router.push("/admin")
-        // } else if (data.role === "store_owner") {
-        //   router.push("/store-owner/stores")
-        // } else {
-        //   router.push("/")
-        // }
       } else {
         setError(data.error || "Login failed")
       }

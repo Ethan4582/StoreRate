@@ -1,6 +1,6 @@
 import { type NextRequest, NextResponse } from "next/server"
 import { prisma } from "@/lib/db"
-import { hashPassword } from "@/lib/auth"
+import { hashPassword, generateToken } from "@/lib/auth"
 
 export async function POST(request: NextRequest) {
   try {
@@ -43,13 +43,30 @@ export async function POST(request: NextRequest) {
       },
     })
 
-    return NextResponse.json(
+    const token = generateToken({
+      id: newUser.id,
+      email: newUser.email,
+      name: newUser.name,
+      role: newUser.role,
+    })
+
+    const response = NextResponse.json(
       {
         message: "User created successfully",
         user: newUser,
+        redirect: newUser.role === "normal_user" ? "/stores" : newUser.role === "store_owner" ? "/store-owner/stores" : "/",
       },
       { status: 201 },
     )
+
+    response.cookies.set("auth-token", token, {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === "production",
+      sameSite: "lax",
+      maxAge: 60 * 60 * 24 * 7,
+    })
+
+    return response
   } catch (error) {
     console.error("Registration error:", error)
     return NextResponse.json({ error: "Internal server error" }, { status: 500 })

@@ -59,16 +59,8 @@ export default function RegisterPage() {
       const data = await response.json()
 
       if (response.ok) {
-      
-        if (formData.role === "normal_user") {
-          router.push("/stores")
-        } else if (formData.role === "system_admin") {
-          router.push("/admin")
-        } else if (formData.role === "store_owner") {
-          router.push("/store-owner/stores")
-        } else {
-          router.push("/")
-        }
+        localStorage.setItem("user", JSON.stringify(data.user))
+        router.push(data.redirect || "/stores")
       } else {
         setError(data.error || "Registration failed")
       }

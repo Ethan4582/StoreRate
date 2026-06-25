@@ -27,7 +27,7 @@ export async function POST(request: NextRequest) {
             name: "Admin",
             role: "system_admin",
           },
-          redirect: "/admin/dashboard",
+          redirect: "/admin",
         },
         { status: 200 }
       )
