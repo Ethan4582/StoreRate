@@ -76,3 +76,52 @@ export async function GET(request: NextRequest) {
     return NextResponse.json({ error: "Internal server error" }, { status: 500 })
   }
 }
+
+export async function POST(request: NextRequest) {
+  try {
+    const token = request.cookies.get("auth-token")?.value
+    if (!token) {
+      return NextResponse.json({ error: "Unauthorized" }, { status: 401 })
+    }
+
+    const adminUser = verifyToken(token)
+    if (!adminUser || adminUser.role !== "system_admin") {
+      return NextResponse.json({ error: "Unauthorized" }, { status: 401 })
+    }
+
+    const data = await request.json()
+    const { name, description, address, phone, email, website, ownerId } = data
+
+    if (!name || !address || !ownerId) {
+      return NextResponse.json({ error: "Missing required fields" }, { status: 400 })
+    }
+
+    const slug = name.toLowerCase().replace(/[^a-z0-9]+/g, "-")
+
+    const existingStore = await prisma.store.findUnique({
+      where: { slug },
+    })
+
+    if (existingStore) {
+      return NextResponse.json({ error: "A store with this name already exists" }, { status: 400 })
+    }
+
+    const store = await prisma.store.create({
+      data: {
+        name,
+        slug,
+        description,
+        address,
+        phone,
+        email,
+        website,
+        ownerId: parseInt(ownerId),
+      },
+    })
+
+    return NextResponse.json({ store })
+  } catch (error) {
+    console.error("Admin store creation error:", error)
+    return NextResponse.json({ error: "Internal server error" }, { status: 500 })
+  }
+}

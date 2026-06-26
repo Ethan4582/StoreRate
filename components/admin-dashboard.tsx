@@ -3,7 +3,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
 import Link from "next/link"
-import { Users, Store, Star, TrendingUp } from "lucide-react"
+import { Users, Store, Star, TrendingUp, UserRound, Store as StoreIcon, PieChart, ArrowRight } from "lucide-react"
 
 export async function AdminDashboard() {
 
@@ -53,23 +53,19 @@ export async function AdminDashboard() {
     },
   })
 
-  const customers = userRoleCounts.find((stat) => stat.role === "normal_user")?._count.id || 0
-  const storeOwners = userRoleCounts.find((stat) => stat.role === "store_owner")?._count.id || 0
-
-  
   const [recentUsers, recentStores, recentRatings] = await Promise.all([
     prisma.user.findMany({
       where: { role: { not: "system_admin" } },
       select: { name: true, email: true, role: true, createdAt: true },
       orderBy: { createdAt: "desc" },
-      take: 5,
+      take: 4,
     }),
     prisma.store.findMany({
       include: {
         owner: { select: { name: true } },
       },
       orderBy: { createdAt: "desc" },
-      take: 5,
+      take: 4,
     }),
     prisma.rating.findMany({
       include: {
@@ -77,7 +73,7 @@ export async function AdminDashboard() {
         user: { select: { name: true } },
       },
       orderBy: { createdAt: "desc" },
-      take: 5,
+      take: 4,
     }),
   ])
 
@@ -92,105 +88,137 @@ export async function AdminDashboard() {
     }
   }
 
-  const getRoleBadgeVariant = (role: string) => {
-    switch (role) {
-      case "store_owner":
-        return "default"
-      case "normal_user":
-        return "secondary"
-      default:
-        return "outline"
-    }
-  }
-
   return (
-    <div className="space-y-8">
+    <div className="space-y-6">
       {/* Statistics Cards */}
       <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
-        <Card>
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Total Users</CardTitle>
-            <Users className="h-4 w-4 text-muted-foreground" />
-          </CardHeader>
-          <CardContent>
-            <div className="text-2xl font-bold">{userStats._count.id}</div>
-            <p className="text-xs text-muted-foreground">+{newUsers30d} this month</p>
-            <div className="mt-2 text-xs text-muted-foreground">
-              {customers} customers, {storeOwners} store owners
+        <Card className="border-border/50 shadow-sm">
+          <CardContent className="p-6 flex items-center gap-4">
+            <div className="bg-blue-50 text-blue-500 p-3 rounded-2xl">
+              <Users className="h-6 w-6" />
+            </div>
+            <div>
+              <p className="text-sm font-medium text-muted-foreground">Total Users</p>
+              <div className="flex items-baseline gap-2">
+                <h3 className="text-2xl font-bold">{userStats._count.id}</h3>
+              </div>
+              <p className="text-xs text-green-500 mt-1 font-medium flex items-center gap-1">
+                ↑ {newUsers30d} this month
+              </p>
             </div>
           </CardContent>
         </Card>
 
-        <Card>
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Total Stores</CardTitle>
-            <Store className="h-4 w-4 text-muted-foreground" />
-          </CardHeader>
-          <CardContent>
-            <div className="text-2xl font-bold">{storeStats._count.id}</div>
-            <p className="text-xs text-muted-foreground">+{newStores30d} this month</p>
-          </CardContent>
-        </Card>
-
-        <Card>
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Total Ratings</CardTitle>
-            <Star className="h-4 w-4 text-muted-foreground" />
-          </CardHeader>
-          <CardContent>
-            <div className="text-2xl font-bold">{ratingStats._count.id}</div>
-            <p className="text-xs text-muted-foreground">+{newRatings30d} this month</p>
-          </CardContent>
-        </Card>
-
-        <Card>
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Average Rating</CardTitle>
-            <TrendingUp className="h-4 w-4 text-muted-foreground" />
-          </CardHeader>
-          <CardContent>
-            <div className="text-2xl font-bold">
-              {ratingStats._avg.rating ? Number(ratingStats._avg.rating).toFixed(1) : "0.0"}
+        <Card className="border-border/50 shadow-sm">
+          <CardContent className="p-6 flex items-center gap-4">
+            <div className="bg-indigo-50 text-indigo-500 p-3 rounded-2xl">
+              <Store className="h-6 w-6" />
             </div>
-            <p className="text-xs text-muted-foreground">Platform average</p>
+            <div>
+              <p className="text-sm font-medium text-muted-foreground">Total Stores</p>
+              <div className="flex items-baseline gap-2">
+                <h3 className="text-2xl font-bold">{storeStats._count.id}</h3>
+              </div>
+              <p className="text-xs text-green-500 mt-1 font-medium flex items-center gap-1">
+                ↑ {newStores30d} this month
+              </p>
+            </div>
+          </CardContent>
+        </Card>
+
+        <Card className="border-border/50 shadow-sm">
+          <CardContent className="p-6 flex items-center gap-4">
+            <div className="bg-purple-50 text-purple-500 p-3 rounded-2xl">
+              <Star className="h-6 w-6" />
+            </div>
+            <div>
+              <p className="text-sm font-medium text-muted-foreground">Total Ratings</p>
+              <div className="flex items-baseline gap-2">
+                <h3 className="text-2xl font-bold">{ratingStats._count.id}</h3>
+              </div>
+              <p className="text-xs text-green-500 mt-1 font-medium flex items-center gap-1">
+                ↑ {newRatings30d} this month
+              </p>
+            </div>
+          </CardContent>
+        </Card>
+
+        <Card className="border-border/50 shadow-sm">
+          <CardContent className="p-6 flex items-center gap-4">
+            <div className="bg-emerald-50 text-emerald-500 p-3 rounded-2xl">
+              <TrendingUp className="h-6 w-6" />
+            </div>
+            <div>
+              <p className="text-sm font-medium text-muted-foreground">Average Rating</p>
+              <div className="flex items-baseline gap-2">
+                <h3 className="text-2xl font-bold">
+                  {ratingStats._avg.rating ? Number(ratingStats._avg.rating).toFixed(1) : "0.0"}
+                </h3>
+              </div>
+              <p className="text-xs text-muted-foreground mt-1 font-medium">Platform average</p>
+            </div>
           </CardContent>
         </Card>
       </div>
 
       {/* Quick Actions */}
       <div className="grid md:grid-cols-3 gap-6">
-        <Card>
-          <CardHeader>
-            <CardTitle>User Management</CardTitle>
-            <CardDescription>Manage platform users and permissions</CardDescription>
-          </CardHeader>
-          <CardContent>
-            <Button asChild className="w-full">
-              <Link href="/admin/users">Manage Users</Link>
+        <Card className="border-border/50 shadow-sm">
+          <CardContent className="p-6">
+            <div className="flex items-center gap-4 mb-6">
+              <div className="bg-blue-100 text-blue-600 p-3 rounded-full">
+                <UserRound className="h-6 w-6" />
+              </div>
+              <div>
+                <h3 className="font-bold">User Management</h3>
+                <p className="text-sm text-muted-foreground">Manage platform users and permissions</p>
+              </div>
+            </div>
+            <Button asChild className="w-full bg-blue-600 hover:bg-blue-700 text-white rounded-xl flex justify-between items-center h-11">
+              <Link href="/admin/users">
+                Manage Users
+                <ArrowRight className="h-4 w-4" />
+              </Link>
             </Button>
           </CardContent>
         </Card>
 
-        <Card>
-          <CardHeader>
-            <CardTitle>Store Oversight</CardTitle>
-            <CardDescription>Monitor and manage store listings</CardDescription>
-          </CardHeader>
-          <CardContent>
-            <Button asChild className="w-full">
-              <Link href="/admin/stores">Manage Stores</Link>
+        <Card className="border-border/50 shadow-sm">
+          <CardContent className="p-6">
+            <div className="flex items-center gap-4 mb-6">
+              <div className="bg-green-100 text-green-600 p-3 rounded-full">
+                <StoreIcon className="h-6 w-6" />
+              </div>
+              <div>
+                <h3 className="font-bold">Store Overview</h3>
+                <p className="text-sm text-muted-foreground">Monitor and manage store listings</p>
+              </div>
+            </div>
+            <Button asChild className="w-full bg-blue-600 hover:bg-blue-700 text-white rounded-xl flex justify-between items-center h-11">
+              <Link href="/admin/stores">
+                Manage Stores
+                <ArrowRight className="h-4 w-4" />
+              </Link>
             </Button>
           </CardContent>
         </Card>
 
-        <Card>
-          <CardHeader>
-            <CardTitle>Platform Analytics</CardTitle>
-            <CardDescription>View detailed platform statistics</CardDescription>
-          </CardHeader>
-          <CardContent>
-            <Button asChild className="w-full">
-              <Link href="/admin/analytics">View Analytics</Link>
+        <Card className="border-border/50 shadow-sm">
+          <CardContent className="p-6">
+            <div className="flex items-center gap-4 mb-6">
+              <div className="bg-purple-100 text-purple-600 p-3 rounded-full">
+                <PieChart className="h-6 w-6" />
+              </div>
+              <div>
+                <h3 className="font-bold">Platform Analytics</h3>
+                <p className="text-sm text-muted-foreground">View detailed platform statistics</p>
+              </div>
+            </div>
+            <Button asChild className="w-full bg-blue-600 hover:bg-blue-700 text-white rounded-xl flex justify-between items-center h-11">
+              <Link href="/admin/analytics">
+                View Analytics
+                <ArrowRight className="h-4 w-4" />
+              </Link>
             </Button>
           </CardContent>
         </Card>
@@ -198,64 +226,112 @@ export async function AdminDashboard() {
 
       {/* Recent Activity */}
       <div className="grid lg:grid-cols-3 gap-6">
-        <Card>
-          <CardHeader>
-            <CardTitle>Recent Users</CardTitle>
-            <CardDescription>Latest user registrations</CardDescription>
+        <Card className="border-border/50 shadow-sm flex flex-col">
+          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-4">
+            <div>
+              <CardTitle className="text-base font-bold">Recent Users</CardTitle>
+              <CardDescription className="text-xs">Latest user registrations</CardDescription>
+            </div>
+            <Link href="/admin/users" className="text-xs text-blue-600 hover:underline font-medium">View all</Link>
           </CardHeader>
-          <CardContent>
-            <div className="space-y-3">
+          <CardContent className="flex-1 flex flex-col justify-between">
+            <div className="space-y-4 mb-6">
               {recentUsers.map((user, index) => (
                 <div key={index} className="flex justify-between items-center">
-                  <div>
-                    <p className="font-medium text-sm">{user.name}</p>
-                    <p className="text-xs text-muted-foreground">{user.email}</p>
+                  <div className="flex items-center gap-3">
+                    <div className={`w-8 h-8 rounded-full flex items-center justify-center text-xs font-bold ${
+                      user.role === 'store_owner' ? 'bg-purple-100 text-purple-700' : 
+                      user.role === 'system_admin' ? 'bg-emerald-100 text-emerald-700' :
+                      'bg-blue-100 text-blue-700'
+                    }`}>
+                      {user.name.charAt(0).toUpperCase()}
+                    </div>
+                    <div>
+                      <p className="font-medium text-sm leading-tight">{user.name}</p>
+                      <p className="text-xs text-muted-foreground">{user.email}</p>
+                    </div>
                   </div>
-                  <Badge variant={getRoleBadgeVariant(user.role)} className="text-xs">
+                  <span className="text-xs font-medium text-blue-600 bg-blue-50 px-2 py-1 rounded-md">
                     {getRoleLabel(user.role)}
-                  </Badge>
+                  </span>
                 </div>
               ))}
             </div>
+            <Button variant="outline" className="w-full rounded-xl text-blue-600 border-blue-200 hover:bg-blue-50 hover:text-blue-700 flex justify-center items-center gap-2" asChild>
+              <Link href="/admin/users">
+                View All Users <ArrowRight className="w-4 h-4" />
+              </Link>
+            </Button>
           </CardContent>
         </Card>
 
-        <Card>
-          <CardHeader>
-            <CardTitle>Recent Stores</CardTitle>
-            <CardDescription>Latest store additions</CardDescription>
+        <Card className="border-border/50 shadow-sm flex flex-col">
+          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-4">
+            <div>
+              <CardTitle className="text-base font-bold">Recent Stores</CardTitle>
+              <CardDescription className="text-xs">Latest store additions</CardDescription>
+            </div>
+            <Link href="/admin/stores" className="text-xs text-blue-600 hover:underline font-medium">View all</Link>
           </CardHeader>
-          <CardContent>
-            <div className="space-y-3">
+          <CardContent className="flex-1 flex flex-col justify-between">
+            <div className="space-y-4 mb-6">
               {recentStores.map((store, index) => (
-                <div key={index}>
-                  <p className="font-medium text-sm">{store.name}</p>
-                  <p className="text-xs text-muted-foreground">by {store.owner.name}</p>
-                  <p className="text-xs text-muted-foreground">{new Date(store.createdAt).toLocaleDateString()}</p>
+                <div key={index} className="flex justify-between items-center">
+                  <div className="flex items-center gap-3">
+                    <div className="bg-slate-100 p-2 rounded-lg text-slate-500">
+                      <Store className="w-4 h-4" />
+                    </div>
+                    <div>
+                      <p className="font-medium text-sm leading-tight">{store.name}</p>
+                      <p className="text-xs text-muted-foreground">by {store.owner.name}</p>
+                      <p className="text-[10px] text-muted-foreground">{new Date(store.createdAt).toLocaleDateString()}</p>
+                    </div>
+                  </div>
+                  {/* Assuming store rating isn't available here directly, mock or just show a star */}
+                  <div className="flex items-center gap-1 text-xs font-medium text-amber-500">
+                    <Star className="w-3 h-3 fill-amber-500" />
+                    -.-
+                  </div>
                 </div>
               ))}
             </div>
+            <Button variant="outline" className="w-full rounded-xl text-blue-600 border-blue-200 hover:bg-blue-50 hover:text-blue-700 flex justify-center items-center gap-2" asChild>
+              <Link href="/admin/stores">
+                View All Stores <ArrowRight className="w-4 h-4" />
+              </Link>
+            </Button>
           </CardContent>
         </Card>
 
-        <Card>
-          <CardHeader>
-            <CardTitle>Recent Ratings</CardTitle>
-            <CardDescription>Latest customer reviews</CardDescription>
+        <Card className="border-border/50 shadow-sm flex flex-col">
+          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-4">
+            <div>
+              <CardTitle className="text-base font-bold">Recent Ratings</CardTitle>
+              <CardDescription className="text-xs">Latest customer reviews</CardDescription>
+            </div>
+            <Link href="/admin/ratings" className="text-xs text-blue-600 hover:underline font-medium">View all</Link>
           </CardHeader>
-          <CardContent>
-            <div className="space-y-3">
+          <CardContent className="flex-1 flex flex-col justify-between">
+            <div className="space-y-4 mb-6">
               {recentRatings.map((rating, index) => (
-                <div key={index}>
-                  <div className="flex justify-between items-center">
-                    <p className="font-medium text-sm">{rating.store.name}</p>
-                    <Badge variant="secondary">⭐ {rating.rating}</Badge>
+                <div key={index} className="flex justify-between items-center">
+                  <div>
+                    <p className="font-medium text-sm leading-tight">{rating.store.name}</p>
+                    <p className="text-xs text-muted-foreground">by {rating.user.name}</p>
+                    <p className="text-[10px] text-muted-foreground">{new Date(rating.createdAt).toLocaleDateString()}</p>
                   </div>
-                  <p className="text-xs text-muted-foreground">by {rating.user.name}</p>
-                  <p className="text-xs text-muted-foreground">{new Date(rating.createdAt).toLocaleDateString()}</p>
+                  <div className="flex items-center gap-1 text-xs font-medium text-amber-500 bg-amber-50 px-2 py-1 rounded-md">
+                    <Star className="w-3 h-3 fill-amber-500" />
+                    {rating.rating}
+                  </div>
                 </div>
               ))}
             </div>
+            <Button variant="outline" className="w-full rounded-xl text-blue-600 border-blue-200 hover:bg-blue-50 hover:text-blue-700 flex justify-center items-center gap-2" asChild>
+              <Link href="/admin/ratings">
+                View All Ratings <ArrowRight className="w-4 h-4" />
+              </Link>
+            </Button>
           </CardContent>
         </Card>
       </div>

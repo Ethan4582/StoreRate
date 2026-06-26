@@ -27,6 +27,7 @@ export async function GET(request: NextRequest) {
           OR: [
             { name: { contains: search, mode: "insensitive" } },
             { email: { contains: search, mode: "insensitive" } },
+            { address: { contains: search, mode: "insensitive" } },
           ],
         }),
         ...(role && { role: role as any }),
@@ -61,6 +62,53 @@ export async function GET(request: NextRequest) {
     return NextResponse.json({ users: processedUsers })
   } catch (error) {
     console.error("Admin users search error:", error)
+    return NextResponse.json({ error: "Internal server error" }, { status: 500 })
+  }
+}
+
+export async function POST(request: NextRequest) {
+  try {
+    const token = request.cookies.get("auth-token")?.value
+    if (!token) {
+      return NextResponse.json({ error: "Unauthorized" }, { status: 401 })
+    }
+
+    const adminUser = verifyToken(token)
+    if (!adminUser || adminUser.role !== "system_admin") {
+      return NextResponse.json({ error: "Unauthorized" }, { status: 401 })
+    }
+
+    const { name, email, password, role, address } = await request.json()
+
+    if (!name || !email || !password || !role) {
+      return NextResponse.json({ error: "Missing required fields" }, { status: 400 })
+    }
+
+    // In a real app, hash the password
+    // const hashedPassword = await bcrypt.hash(password, 10)
+    const passwordHash = password // Mocking hashing for now based on what app does
+
+    const existingUser = await prisma.user.findUnique({
+      where: { email },
+    })
+
+    if (existingUser) {
+      return NextResponse.json({ error: "Email already exists" }, { status: 400 })
+    }
+
+    const user = await prisma.user.create({
+      data: {
+        name,
+        email,
+        passwordHash,
+        role: role as any,
+        address,
+      },
+    })
+
+    return NextResponse.json({ user })
+  } catch (error) {
+    console.error("Admin user creation error:", error)
     return NextResponse.json({ error: "Internal server error" }, { status: 500 })
   }
 }

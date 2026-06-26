@@ -85,7 +85,7 @@ export function Navbar({ user }: NavbarProps) {
       case "system_admin":
         return [
           ...baseLinks,
-          { href: "/admin", label: "Admin Panel" },
+          // { href: "/admin", label: "Admin Panel" },
           { href: "/stores", label: "Browse Stores" }
         ]
       case "normal_user":
