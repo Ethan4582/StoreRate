@@ -16,6 +16,7 @@ interface RatingWithStore {
   store: {
     name: string
     address: string
+    image?: string | null
   }
 }
 
@@ -24,7 +25,7 @@ interface UserRatingsClientProps {
 }
 
 export function UserRatingsClient({ ratings }: UserRatingsClientProps) {
-  const [layout, setLayout] = useState<"list" | "grid">("list")
+  const [layout, setLayout] = useState<"list" | "grid">("grid")
 
   const renderStars = (rating: number) => {
     return Array.from({ length: 5 }, (_, i) => (
@@ -88,23 +89,35 @@ export function UserRatingsClient({ ratings }: UserRatingsClientProps) {
         </div>
       </div>
 
-      <div className={layout === "list" ? "flex flex-col gap-6" : "grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"}>
+      <div className={layout === "list" ? "flex flex-col gap-6" : "grid grid-cols-1 md:grid-cols-2 gap-6"}>
         {ratings.map((rating) => (
-          <Card key={rating.id} className="rounded-2xl shadow-sm hover:shadow-md transition-shadow bg-white border border-slate-200 p-6 flex flex-col gap-6">
+          <Card key={rating.id} className="rounded-2xl shadow-sm hover:shadow-md transition-shadow bg-white border border-slate-200 p-0 flex flex-col overflow-hidden">
             
-            {/* Top Row: Store Info */}
-            <div className="flex items-start justify-between">
-              <div className="flex gap-4 items-start">
-                <div className="bg-blue-50 text-blue-600 p-3 rounded-xl flex-shrink-0">
-                  <Store className="h-6 w-6" />
-                </div>
-                <div>
-                  <h3 className="text-lg font-bold text-slate-900 tracking-tight">{rating.store.name}</h3>
-                  <div className="flex items-center text-slate-500 text-sm mt-1">
-                    <MapPin className="h-3.5 w-3.5 mr-1" />
-                    {rating.store.address}
+            {/* Image Section */}
+            {rating.store.image ? (
+              <div className="w-full h-48 bg-slate-100 overflow-hidden shrink-0">
+                <img src={rating.store.image} alt={rating.store.name} className="w-full h-full object-cover" />
+              </div>
+            ) : (
+              <div className="w-full h-48 bg-slate-100 flex items-center justify-center shrink-0">
+                <Store className="h-12 w-12 text-slate-300" />
+              </div>
+            )}
+
+            <div className="p-6 flex flex-col gap-6 h-full">
+              {/* Top Row: Store Info */}
+              <div className="flex items-start justify-between">
+                <div className="flex gap-4 items-start">
+                  <div className="bg-blue-50 text-blue-600 p-3 rounded-xl flex-shrink-0">
+                    <Store className="h-6 w-6" />
                   </div>
-                </div>
+                  <div>
+                    <h3 className="text-lg font-bold text-slate-900 tracking-tight">{rating.store.name}</h3>
+                    <div className="flex items-center text-slate-500 text-sm mt-1">
+                      <MapPin className="h-3.5 w-3.5 mr-1" />
+                      {rating.store.address}
+                    </div>
+                  </div>
               </div>
               <div className="flex items-center gap-3">
                 <div className="hidden sm:flex items-center gap-1">{renderStars(rating.rating)}</div>
@@ -139,15 +152,16 @@ export function UserRatingsClient({ ratings }: UserRatingsClientProps) {
               </p>
             </div>
 
-            {/* Bottom Row: Metadata & Action */}
-            <div className="flex justify-between items-center pt-2 mt-auto">
-              <div className="flex items-center text-sm text-slate-500">
-                <Calendar className="h-4 w-4 mr-2" />
-                Rated on {new Date(rating.createdAt).toLocaleDateString()}
+              {/* Bottom Row: Metadata & Action */}
+              <div className="flex justify-between items-center pt-2 mt-auto">
+                <div className="flex items-center text-sm text-slate-500">
+                  <Calendar className="h-4 w-4 mr-2" />
+                  Rated on {new Date(rating.createdAt).toLocaleDateString()}
+                </div>
+                <Button variant="outline" className="border-slate-200 text-slate-900 hover:bg-slate-50" size="sm" asChild>
+                  <Link href={`/stores/${rating.storeId}`}>View Store</Link>
+                </Button>
               </div>
-              <Button variant="outline" className="border-slate-200 text-slate-900 hover:bg-slate-50" size="sm" asChild>
-                <Link href={`/stores/${rating.storeId}`}>View Store</Link>
-              </Button>
             </div>
 
           </Card>

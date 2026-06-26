@@ -13,6 +13,7 @@ export async function UserRatingsList({ userId }: UserRatingsListProps) {
         select: {
           name: true,
           address: true,
+          image: true,
         },
       },
     },

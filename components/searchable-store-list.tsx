@@ -7,6 +7,7 @@ import { Badge } from "@/components/ui/badge"
 import { Input } from "@/components/ui/input"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import Link from "next/link"
+import Image from "next/image"
 import { Search, MapPin, Phone, Mail, Globe, Heart, Filter, ChevronLeft, ChevronRight, LayoutGrid, List } from "lucide-react"
 
 interface Store {
@@ -125,22 +126,38 @@ export function SearchableStoreList({
   }
 
   return (
-    <div className="space-y-8">
-      {/* Search and Filters Bar */}
-      <div className="bg-white rounded-2xl p-4 shadow-sm border border-border/50 flex flex-col lg:flex-row items-center gap-4">
-        <div className="relative flex-1 w-full">
-          <Search className="absolute left-4 top-1/2 transform -translate-y-1/2 h-5 w-5 text-muted-foreground" />
-          <Input
-            placeholder="Search stores..."
-            value={search}
-            onChange={(e) => setSearch(e.target.value)}
-            className="pl-12 h-12 rounded-xl bg-gray-50/50 border-transparent focus-visible:ring-1 focus-visible:ring-primary focus-visible:bg-white text-base"
+    <div className="flex flex-col lg:flex-row gap-8 items-start w-full">
+      {/* Sidebar (Left) */}
+      <div className="w-full lg:w-[320px] shrink-0 bg-background lg:bg-slate-50/50 rounded-3xl lg:p-6 lg:border border-border/50 flex flex-col space-y-6">
+        
+        {/* Hero Content */}
+        <div className="flex flex-col items-center lg:items-start text-center lg:text-left">
+          <Image 
+            src="/asset_1.png" 
+            alt="Store illustration" 
+            width={300} 
+            height={200} 
+            className="w-full max-w-[250px] h-auto object-contain mb-6"
+            priority
           />
+          <h1 className="text-3xl font-extrabold text-foreground tracking-tight mb-2">Browse Stores</h1>
+          <p className="text-sm text-muted-foreground">Discover and rate the best local businesses near you.</p>
         </div>
 
-        <div className="flex flex-col sm:flex-row w-full lg:w-auto gap-4">
+        {/* Search & Filters */}
+        <div className="space-y-4 pt-4 border-t border-border/50">
+          <div className="relative w-full">
+            <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+            <Input
+              placeholder="Search stores..."
+              value={search}
+              onChange={(e) => setSearch(e.target.value)}
+              className="pl-10 h-11 rounded-xl bg-white border-border/50 focus-visible:ring-1 focus-visible:ring-primary text-sm shadow-sm"
+            />
+          </div>
+
           <Select value={category} onValueChange={setCategory}>
-            <SelectTrigger className="w-full sm:w-[200px] h-12 rounded-xl bg-white border-gray-200">
+            <SelectTrigger className="w-full h-11 rounded-xl bg-white border-border/50 shadow-sm text-sm">
               <SelectValue placeholder="All Categories" />
             </SelectTrigger>
             <SelectContent>
@@ -155,7 +172,7 @@ export function SearchableStoreList({
           </Select>
 
           <Select value={location || "all"} onValueChange={setLocation}>
-            <SelectTrigger className="w-full sm:w-[200px] h-12 rounded-xl bg-white border-gray-200">
+            <SelectTrigger className="w-full h-11 rounded-xl bg-white border-border/50 shadow-sm text-sm">
               <SelectValue placeholder="All Locations" />
             </SelectTrigger>
             <SelectContent>
@@ -166,12 +183,15 @@ export function SearchableStoreList({
             </SelectContent>
           </Select>
 
-          <Button variant="outline" className="h-12 px-6 rounded-xl border-gray-200 flex items-center gap-2 w-full sm:w-auto" onClick={clearFilters}>
-            <Filter className="h-4 w-4 text-primary" />
-            <span className="font-medium text-gray-700">Filters</span>
+          <Button variant="outline" className="w-full h-11 rounded-xl border-border/50 bg-white shadow-sm flex items-center justify-center gap-2 hover:bg-slate-50 text-primary hover:text-primary" onClick={clearFilters}>
+            <Filter className="h-4 w-4" />
+            <span className="font-medium">Filters</span>
           </Button>
         </div>
       </div>
+
+      {/* Main Content Area (Right) */}
+      <div className="flex-1 w-full space-y-6">
 
       {/* Results Header */}
       <div className="flex flex-col sm:flex-row justify-between items-center gap-4">
@@ -349,6 +369,7 @@ export function SearchableStoreList({
           )}
         </>
       )}
+      </div>
     </div>
   )
 }
