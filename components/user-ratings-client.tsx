@@ -67,12 +67,12 @@ export function UserRatingsClient({ ratings }: UserRatingsClientProps) {
         </div>
       </div>
 
-      <div className="grid grid-cols-1 xl:grid-cols-2 gap-6">
+      <div className="grid grid-cols-1 gap-6">
         {ratings.map((rating) => (
           <Card key={rating.id} className="rounded-2xl shadow-sm hover:shadow-md transition-shadow bg-white border border-slate-200 p-0 flex flex-col sm:flex-row overflow-hidden">
             
             {/* Image Section */}
-            <div className="w-full sm:w-2/5 md:w-1/3 shrink-0 bg-slate-100 flex items-center justify-center min-h-[160px]">
+            <div className="w-full sm:w-64 shrink-0 bg-slate-100 flex items-center justify-center min-h-[200px] sm:min-h-full">
               {rating.store.image ? (
                 <img src={rating.store.image} alt={rating.store.name} className="w-full h-full object-cover" />
               ) : (
@@ -81,63 +81,56 @@ export function UserRatingsClient({ ratings }: UserRatingsClientProps) {
             </div>
 
             {/* Content Section */}
-            <div className="p-4 sm:p-5 flex flex-col gap-4 w-full">
+            <div className="p-5 sm:p-6 flex flex-col gap-4 w-full">
               {/* Top Row: Store Info */}
-              <div className="flex items-start justify-between">
-                <div className="flex gap-3 items-start">
-                  <div className="bg-blue-50 text-blue-600 p-2.5 rounded-xl flex-shrink-0">
-                    <Store className="h-5 w-5" />
+              <div className="flex flex-col sm:flex-row sm:items-start justify-between gap-4">
+                <div className="flex gap-4 items-start">
+                  <div className="bg-blue-50 text-blue-600 p-3 rounded-xl flex-shrink-0">
+                    <Store className="h-6 w-6" />
                   </div>
                   <div>
-                    <h3 className="text-base sm:text-lg font-bold text-slate-900 tracking-tight leading-tight">{rating.store.name}</h3>
-                    <div className="flex items-center text-slate-500 text-xs sm:text-sm mt-0.5">
-                      <MapPin className="h-3 w-3 mr-1" />
-                      {rating.store.address}
+                    <h3 className="text-xl font-bold text-slate-900 tracking-tight leading-tight mb-1">{rating.store.name}</h3>
+                    <div className="flex items-center text-slate-500 text-sm">
+                      <MapPin className="h-3.5 w-3.5 mr-1.5 shrink-0" />
+                      <span className="line-clamp-1">{rating.store.address}</span>
                     </div>
                   </div>
                 </div>
-                <div className="flex items-center gap-2">
-                  <div className="hidden sm:flex items-center gap-0.5">{renderStars(rating.rating)}</div>
+                <div className="flex flex-wrap items-center gap-2">
+                  <div className="flex items-center gap-0.5">{renderStars(rating.rating)}</div>
                   <Badge variant="secondary" className="bg-blue-50 text-blue-600 font-medium px-2.5 py-0.5 rounded-full border-none text-xs">
                     {getRatingLabel(rating.rating)}
                   </Badge>
-                  <Button variant="outline" className="border-slate-200 text-slate-900 hover:bg-slate-50 hidden md:flex h-8 px-2.5" size="sm" asChild>
-                    <Link href={`/stores/${rating.storeId}/rate`}>
-                      <Edit className="h-3.5 w-3.5 mr-1.5" />
-                      Edit
-                    </Link>
-                  </Button>
                 </div>
               </div>
 
-              {/* Mobile Stars and Edit button fallback */}
-              <div className="flex justify-between items-center sm:hidden">
-                  <div className="flex items-center gap-0.5">{renderStars(rating.rating)}</div>
-                  <Button variant="outline" className="border-slate-200 text-slate-900 hover:bg-slate-50 h-8 px-2.5" size="sm" asChild>
-                    <Link href={`/stores/${rating.storeId}/rate`}>
-                      <Edit className="h-3.5 w-3.5 mr-1.5" />
-                      Edit
-                    </Link>
-                  </Button>
-              </div>
-
               {/* Middle Row: Review Text */}
-              <div className="border-t border-slate-100 pt-3 flex-grow">
-                <h4 className="font-semibold text-slate-900 text-sm mb-1.5">Your Review</h4>
-                <p className="text-slate-500 text-sm leading-relaxed line-clamp-2">
+              <div className="border-t border-slate-100 pt-4 flex-grow">
+                <h4 className="font-semibold text-slate-900 text-sm mb-2">Your Review</h4>
+                <p className="text-slate-600 text-base leading-relaxed">
                   {rating.review || "No written review."}
                 </p>
               </div>
 
-              {/* Bottom Row: Metadata & Action */}
-              <div className="flex justify-between items-center pt-2 mt-auto">
-                <div className="flex items-center text-xs text-slate-500">
-                  <Calendar className="h-3.5 w-3.5 mr-1.5" />
+              {/* Bottom Row: Metadata & Actions */}
+              <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center pt-4 mt-auto border-t border-slate-50 gap-4">
+                <div className="flex items-center text-sm text-slate-500">
+                  <Calendar className="h-4 w-4 mr-2" />
                   Rated on {new Date(rating.createdAt).toLocaleDateString()}
                 </div>
-                <Button variant="outline" className="border-slate-200 text-slate-900 hover:bg-slate-50 h-8 px-3 text-xs" size="sm" asChild>
-                  <Link href={`/stores/${rating.storeId}`}>View Store</Link>
-                </Button>
+                <div className="flex items-center gap-3">
+                  <Button variant="outline" className="border-slate-200 text-slate-900 hover:bg-slate-50" asChild>
+                    <Link href={`/stores/${rating.storeId}`}>
+                      View Review
+                    </Link>
+                  </Button>
+                  <Button className="bg-blue-600 text-white hover:bg-blue-700" asChild>
+                    <Link href={`/stores/${rating.storeId}/rate`}>
+                      <Edit className="h-4 w-4 mr-2" />
+                      Edit Review
+                    </Link>
+                  </Button>
+                </div>
               </div>
             </div>
 

@@ -1,6 +1,7 @@
 import { redirect } from "next/navigation"
 import { getCurrentUser } from "@/lib/get-user"
 import { Navbar } from "@/components/navbar"
+import { SidebarLayout } from "@/components/sidebar-layout"
 import { UserRatingsList } from "@/components/user-ratings-list"
 
 export default async function MyReviewsPage() {
@@ -15,12 +16,12 @@ export default async function MyReviewsPage() {
   }
 
   return (
-    <div className="min-h-screen bg-background">
+    <div className="min-h-screen bg-slate-50">
       <Navbar user={user} />
 
-      <main className="container mx-auto px-4 py-8">
+      <SidebarLayout userRole={user.role}>
         <UserRatingsList userId={user.id} />
-      </main>
+      </SidebarLayout>
     </div>
   )
 }

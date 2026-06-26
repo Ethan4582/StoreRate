@@ -18,7 +18,8 @@ export default async function ProfilePage() {
     redirect("/login")
   }
 
-  const [storeCount, reviewCount, recentRatings, recentStores] = await Promise.all([
+  const [dbUser, storeCount, reviewCount, recentRatings, recentStores] = await Promise.all([
+    prisma.user.findUnique({ where: { id: user.id }, select: { createdAt: true } }),
     prisma.store.count({ where: { ownerId: user.id } }),
     prisma.rating.count({ where: { userId: user.id } }),
     prisma.rating.findMany({
@@ -33,6 +34,8 @@ export default async function ProfilePage() {
       take: 3
     })
   ])
+
+  const userCreatedAt = dbUser?.createdAt || new Date()
 
   // Combine and sort recent activity
   const activities = [
@@ -90,7 +93,7 @@ export default async function ProfilePage() {
                   <div className="flex items-center gap-3 text-sm text-slate-500">
                     <div className="flex items-center gap-1.5">
                       <Calendar className="w-4 h-4" />
-                      Member since {format(user.createdAt, "dd MMM yyyy")}
+                      Member since {format(userCreatedAt, "dd MMM yyyy")}
                     </div>
                     <Badge className="bg-green-100 text-green-700 hover:bg-green-100 border-none px-2 rounded-full font-medium">
                       Active Member
@@ -207,7 +210,7 @@ export default async function ProfilePage() {
                       <Calendar className="w-4 h-4 text-slate-400 shrink-0" />
                       <span className="text-sm text-slate-600 font-medium">Join Date</span>
                     </div>
-                    <span className="text-sm text-slate-900 font-medium text-left flex-1">{format(user.createdAt, "dd MMM yyyy")}</span>
+                    <span className="text-sm text-slate-900 font-medium text-left flex-1">{format(userCreatedAt, "dd MMM yyyy")}</span>
                     <Button variant="outline" size="sm" className="h-8 rounded-lg" disabled>View</Button>
                   </div>
                 </div>

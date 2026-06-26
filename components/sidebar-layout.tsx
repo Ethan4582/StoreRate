@@ -22,9 +22,9 @@ export function SidebarLayout({ children, userRole }: SidebarLayoutProps) {
   ]
 
   return (
-    <div className="flex flex-col md:flex-row min-h-[calc(100vh-64px)] w-full max-w-7xl mx-auto px-4 py-8 gap-8">
+    <div className="flex flex-col md:flex-row min-h-[calc(100vh-64px)] w-full max-w-[1600px] mx-auto px-4 md:px-8 lg:px-12 py-8 gap-8">
       {/* Sidebar */}
-      <aside className="w-full md:w-64 shrink-0 space-y-6">
+      <aside className="w-full md:w-[260px] shrink-0 space-y-6 md:sticky md:top-24 md:self-start">
         <nav className="space-y-1">
           {navItems.map((item) => {
             const isActive = pathname === item.href
