@@ -7,7 +7,7 @@ import { Badge } from "@/components/ui/badge"
 import { Input } from "@/components/ui/input"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import Link from "next/link"
-import { Search, MapPin, Phone, Mail, Globe, Heart, Filter, ChevronLeft, ChevronRight } from "lucide-react"
+import { Search, MapPin, Phone, Mail, Globe, Heart, Filter, ChevronLeft, ChevronRight, LayoutGrid, List } from "lucide-react"
 
 interface Store {
   id: number
@@ -42,10 +42,11 @@ export function SearchableStoreList({
   const [location, setLocation] = useState(initialLocation)
   const [sortBy, setSortBy] = useState(initialSortBy)
   const [category, setCategory] = useState("all")
+  const [viewMode, setViewMode] = useState<"grid" | "list">("grid")
   
   const [availableLocations, setAvailableLocations] = useState<string[]>([])
   const [currentPage, setCurrentPage] = useState(1)
-  const itemsPerPage = 6
+  const itemsPerPage = viewMode === "grid" ? 6 : 4
 
   const router = useRouter()
 
@@ -179,6 +180,23 @@ export function SearchableStoreList({
         </p>
         
         <div className="flex items-center gap-3">
+          <div className="hidden sm:flex items-center p-1 rounded-lg bg-gray-100/80 mr-2">
+            <button
+              onClick={() => { setViewMode("grid"); setCurrentPage(1); }}
+              className={`p-1.5 rounded-md transition-colors ${viewMode === "grid" ? "bg-white text-gray-900 shadow-sm" : "text-gray-500 hover:text-gray-900"}`}
+              title="Grid View"
+            >
+              <LayoutGrid className="h-4 w-4" />
+            </button>
+            <button
+              onClick={() => { setViewMode("list"); setCurrentPage(1); }}
+              className={`p-1.5 rounded-md transition-colors ${viewMode === "list" ? "bg-white text-gray-900 shadow-sm" : "text-gray-500 hover:text-gray-900"}`}
+              title="List View"
+            >
+              <List className="h-4 w-4" />
+            </button>
+          </div>
+
           <span className="text-sm text-muted-foreground whitespace-nowrap">Sort by:</span>
           <Select value={sortBy} onValueChange={setSortBy}>
             <SelectTrigger className="w-[140px] h-10 rounded-lg bg-white border-none shadow-sm text-sm font-medium">
@@ -204,11 +222,11 @@ export function SearchableStoreList({
         </div>
       ) : (
         <>
-          <div className="grid gap-6 grid-cols-1 xl:grid-cols-2">
+          <div className={`grid gap-6 ${viewMode === "grid" ? "grid-cols-1 xl:grid-cols-2" : "grid-cols-1"}`}>
             {paginatedStores.map((store) => (
-              <div key={store.id} className="bg-white rounded-2xl shadow-sm border border-gray-100 flex flex-col md:flex-row overflow-hidden hover:shadow-md transition-shadow">
+              <div key={store.id} className={`bg-white rounded-2xl shadow-sm border border-gray-100 flex overflow-hidden hover:shadow-md transition-shadow ${viewMode === "grid" ? "flex-col md:flex-row" : "flex-col sm:flex-row"}`}>
                 {/* Image Section */}
-                <div className="relative w-full md:w-[45%] h-64 md:h-auto shrink-0 bg-gray-50">
+                <div className={`relative shrink-0 bg-gray-50 ${viewMode === "grid" ? "w-full md:w-[45%] h-64 md:h-auto" : "w-full sm:w-[30%] lg:w-[25%] h-48 sm:h-auto"}`}>
                   <div className="absolute top-4 left-4 z-10">
                     <Button variant="secondary" size="icon" className="h-8 w-8 rounded-full bg-white text-gray-500 hover:text-red-500 shadow-sm border border-gray-100">
                       <Heart className="h-4 w-4" />
@@ -230,7 +248,7 @@ export function SearchableStoreList({
                 {/* Content Section */}
                 <div className="p-6 flex-1 flex flex-col justify-between">
                   <div>
-                    <Badge variant="secondary" className="bg-blue-50 text-blue-600 hover:bg-blue-100 mb-3 px-3 py-1 font-medium rounded-full border-none">
+                    <Badge variant="secondary" className="bg-primary/10 text-primary hover:bg-primary/20 mb-3 px-3 py-1 font-medium rounded-full border-none">
                       {getDummyCategory(store.id)}
                     </Badge>
                     
@@ -277,11 +295,11 @@ export function SearchableStoreList({
                   </div>
 
                   {/* Action Buttons */}
-                  <div className="flex gap-3 mt-6 pt-4 border-t border-gray-50">
-                    <Button variant="outline" className="flex-1 rounded-xl h-10 font-semibold border-gray-200 hover:bg-gray-50" asChild>
+                  <div className="flex gap-3 mt-6 pt-4 border-t border-border/50">
+                    <Button variant="outline" className="flex-1 rounded-xl h-10 font-semibold hover:bg-accent" asChild>
                       <Link href={`/stores/${store.id}`}>View Details</Link>
                     </Button>
-                    <Button className="flex-1 rounded-xl h-10 bg-blue-600 hover:bg-blue-700 text-white font-semibold shadow-sm" asChild>
+                    <Button className="flex-1 rounded-xl h-10 bg-primary hover:bg-primary/90 text-primary-foreground font-semibold shadow-sm" asChild>
                       <Link href={`/stores/${store.id}/rate`}>Rate Store</Link>
                     </Button>
                   </div>
@@ -310,8 +328,8 @@ export function SearchableStoreList({
                   onClick={() => setCurrentPage(i + 1)}
                   className={`h-10 w-10 rounded-lg font-medium ${
                     currentPage === i + 1 
-                      ? "bg-blue-600 hover:bg-blue-700 text-white shadow-sm border-transparent" 
-                      : "border-gray-200 hover:bg-gray-50 text-gray-700"
+                      ? "bg-primary hover:bg-primary/90 text-primary-foreground shadow-sm border-transparent" 
+                      : "hover:bg-accent text-foreground"
                   }`}
                 >
                   {i + 1}

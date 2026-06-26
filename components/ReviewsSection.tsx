@@ -91,7 +91,7 @@ export function ReviewsSection({ storeReviews }) {
           transition={{ delay: 0.4, duration: 0.6 }}
           className="text-center mt-12"
         >
-          <Button asChild className="bg-blue-600 hover:bg-blue-700">
+          <Button asChild className="bg-primary hover:bg-primary/90 text-primary-foreground">
             <Link href="/stores">EXPLORE MORE STORES</Link>
           </Button>
         </motion.div>

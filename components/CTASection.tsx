@@ -21,7 +21,7 @@ const CTASection = () => {
             </p>
             
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <Button size="lg" asChild className="bg-blue-600 hover:bg-blue-700">
+              <Button size="lg" asChild className="bg-primary hover:bg-primary/90 text-primary-foreground">
                 <Link href="/register">CREATE ACCOUNT</Link>
               </Button>
               <Button variant="outline" size="lg" asChild>

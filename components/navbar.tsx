@@ -12,8 +12,8 @@ import {
 import { Avatar, AvatarFallback } from "@/components/ui/avatar"
 import { Badge } from "@/components/ui/badge"
 import type { User } from "@/lib/auth"
-import { useEffect, useState } from "react"
-import { Moon, Sun, User as UserIcon, Settings, LogOut, Menu, X } from "lucide-react"
+import { useState } from "react"
+import { User as UserIcon, Settings, LogOut, Menu, X } from "lucide-react"
 
 interface NavbarProps {
   user: User | null
@@ -21,15 +21,6 @@ interface NavbarProps {
 
 export function Navbar({ user }: NavbarProps) {
   const router = useRouter()
-  const [dark, setDark] = useState(false)
-
-  useEffect(() => {
-    if (dark) {
-      document.documentElement.classList.add("dark")
-    } else {
-      document.documentElement.classList.remove("dark")
-    }
-  }, [dark])
 
   const handleLogout = async () => {
     try {
@@ -128,20 +119,6 @@ export function Navbar({ user }: NavbarProps) {
 
           {/* Right side - User menu or Auth buttons */}
           <div className="flex items-center space-x-3">
-            {/* Theme Toggle */}
-            <Button
-              variant="ghost"
-              size="sm"
-              onClick={() => setDark((d) => !d)}
-              className="h-9 w-9 rounded-full"
-              aria-label="Toggle theme"
-            >
-              {dark ? (
-                <Sun className="h-4 w-4" />
-              ) : (
-                <Moon className="h-4 w-4" />
-              )}
-            </Button>
 
             {user ? (
               <DropdownMenu>

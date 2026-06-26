@@ -17,11 +17,11 @@ export default async function StoresPage({ searchParams }: StoresPageProps) {
   const params = await searchParams
 
   return (
-    <div className="min-h-screen bg-[#F8FAFC]">
+    <div className="min-h-screen bg-background text-foreground">
       <Navbar user={user} />
 
-      <main className="container mx-auto px-4 py-8">
-        <div className="mb-8 flex flex-col md:flex-row items-center justify-between gap-8 rounded-2xl bg-white p-8 shadow-sm">
+      <main className="container max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
+        <div className="mb-6 flex flex-col md:flex-row items-center justify-between gap-6 rounded-2xl bg-card border border-border/50 p-6 shadow-sm">
           <div className="max-w-xl">
             <h1 className="text-4xl md:text-5xl font-extrabold text-foreground tracking-tight mb-4">Browse Stores</h1>
             <p className="text-lg text-muted-foreground">Discover and rate the best local businesses near you.</p>
