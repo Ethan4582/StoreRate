@@ -19,7 +19,7 @@ export default async function StoresPage({ searchParams }: StoresPageProps) {
     <div className="min-h-screen bg-background text-foreground">
       <Navbar user={user} />
 
-      <main className="container max-w-[1400px] mx-auto px-4 sm:px-6 lg:px-8 py-6">
+      <main className="w-full mx-auto px-4 md:px-8 lg:px-12 py-6">
 
         <SearchableStoreList
           initialSearch={params.search}

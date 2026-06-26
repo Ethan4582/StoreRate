@@ -128,7 +128,7 @@ export function SearchableStoreList({
   return (
     <div className="flex flex-col lg:flex-row gap-8 items-start w-full">
       {/* Sidebar (Left) */}
-      <div className="w-full lg:w-[320px] shrink-0 bg-background lg:bg-slate-50/50 rounded-3xl lg:p-6 lg:border border-border/50 flex flex-col space-y-6">
+      <div className="w-full lg:w-[320px] shrink-0 bg-background lg:bg-slate-50/50 rounded-3xl lg:p-6 lg:border border-border/50 flex flex-col space-y-6 lg:sticky lg:top-24 lg:h-fit lg:max-h-[calc(100vh-8rem)] overflow-y-auto no-scrollbar">
         
         {/* Hero Content */}
         <div className="flex flex-col items-center lg:items-start text-center lg:text-left">
