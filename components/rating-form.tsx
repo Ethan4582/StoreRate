@@ -14,6 +14,7 @@ import { Star, Lock } from "lucide-react"
 interface Store {
   id: number
   name: string
+  slug?: string
   description: string
   address: string
   image?: string // 
@@ -66,7 +67,8 @@ export function RatingForm({ store, existingRating }: RatingFormProps) {
       const data = await response.json()
 
       if (response.ok) {
-        router.push(`/stores/${store.id}`)
+        router.push(`/stores/${store.slug || store.id}`)
+        router.refresh()
       } else {
         setError(data.error || "Failed to submit rating")
       }

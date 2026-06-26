@@ -12,6 +12,7 @@ interface RatingWithStore {
   storeId: number
   store: {
     name: string
+    slug: string
     address: string
     image?: string | null
   }
@@ -120,12 +121,12 @@ export function UserRatingsClient({ ratings }: UserRatingsClientProps) {
                 </div>
                 <div className="flex items-center gap-3">
                   <Button variant="outline" className="border-slate-200 text-slate-900 hover:bg-slate-50" asChild>
-                    <Link href={`/stores/${rating.storeId}`}>
+                    <Link href={`/stores/${rating.store.slug}`}>
                       View Review
                     </Link>
                   </Button>
                   <Button className="bg-blue-600 text-white hover:bg-blue-700" asChild>
-                    <Link href={`/stores/${rating.storeId}/rate`}>
+                    <Link href={`/stores/${rating.store.slug}/rate`}>
                       <Edit className="h-4 w-4 mr-2" />
                       Edit Review
                     </Link>

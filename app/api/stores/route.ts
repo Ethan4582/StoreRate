@@ -22,9 +22,25 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: "Name and address are required" }, { status: 400 })
     }
 
+    let slug = name.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)+/g, '');
+    if (!slug) slug = `store-${Date.now()}`;
+    let isUnique = false;
+    let counter = 1;
+    let finalSlug = slug;
+    while (!isUnique) {
+      const existing = await prisma.store.findUnique({ where: { slug: finalSlug } });
+      if (existing) {
+        finalSlug = `${slug}-${counter}`;
+        counter++;
+      } else {
+        isUnique = true;
+      }
+    }
+
     const newStore = await prisma.store.create({
       data: {
         name,
+        slug: finalSlug,
         description: description || null,
         address,
         phone: phone || null,

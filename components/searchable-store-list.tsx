@@ -14,6 +14,7 @@ import { BookmarkButton } from "@/components/bookmark-button"
 interface Store {
   id: number
   name: string
+  slug: string
   description: string
   address: string
   phone: string
@@ -316,10 +317,10 @@ export function SearchableStoreList({
                   {/* Action Buttons */}
                   <div className="flex gap-3 mt-6 pt-4 border-t border-border/50">
                     <Button variant="outline" className="flex-1 rounded-xl h-10 font-semibold hover:bg-accent" asChild>
-                      <Link href={`/stores/${store.id}`}>View Details</Link>
+                      <Link href={`/stores/${store.slug || store.id}`}>View Details</Link>
                     </Button>
                     <Button className="flex-1 rounded-xl h-10 bg-primary hover:bg-primary/90 text-primary-foreground font-semibold shadow-sm" asChild>
-                      <Link href={`/stores/${store.id}/rate`}>Rate Store</Link>
+                      <Link href={`/stores/${store.slug || store.id}/rate`}>Rate Store</Link>
                     </Button>
                   </div>
                 </div>

@@ -210,7 +210,7 @@ export function AdminStoresList() {
 
                   <div className="flex gap-2 ml-4">
                     <Button variant="outline" size="sm" asChild>
-                      <Link href={`/stores/${store.id}`}>View Store</Link>
+                      <Link href={`/stores/${store.slug || store.id}`}>View Store</Link>
                     </Button>
                     <Button variant="outline" size="sm">
                       Edit

@@ -12,6 +12,7 @@ export async function UserRatingsList({ userId }: UserRatingsListProps) {
       store: {
         select: {
           name: true,
+          slug: true,
           address: true,
           image: true,
         },

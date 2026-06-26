@@ -93,7 +93,7 @@ export function StoreGrid({ processedStores, ownerId, showOwnerActions = true }:
             
             <div className="border-t border-slate-100 p-2 sm:p-3 flex gap-2 justify-center sm:justify-evenly bg-white">
               <Button variant="ghost" asChild className="text-slate-600 font-semibold text-[13px] gap-2 flex-1 hover:bg-slate-50 rounded-xl h-10">
-                <Link href={`/stores/${store.id}`}>
+                <Link href={`/stores/${store.slug || store.id}`}>
                   <Eye className="h-4 w-4" /> View Details
                 </Link>
               </Button>
@@ -101,7 +101,7 @@ export function StoreGrid({ processedStores, ownerId, showOwnerActions = true }:
               {ownerId && showOwnerActions && (
                 <>
                   <Button variant="ghost" asChild className="text-slate-600 font-semibold text-[13px] gap-2 flex-1 hover:bg-slate-50 rounded-xl h-10">
-                    <Link href={`/store-owner/stores/${store.id}/edit`}>
+                    <Link href={`/store-owner/stores/${store.slug || store.id}/edit`}>
                       <Edit className="h-4 w-4" /> Edit Store
                     </Link>
                   </Button>
