@@ -22,7 +22,6 @@ interface NavbarProps {
 export function Navbar({ user }: NavbarProps) {
   const router = useRouter()
   const [dark, setDark] = useState(false)
-  const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
 
   useEffect(() => {
     if (dark) {
@@ -127,23 +126,6 @@ export function Navbar({ user }: NavbarProps) {
             </Link>
           </div>
 
-          {/* Desktop Navigation */}
-          {user && (
-            <nav className="hidden md:flex items-center space-x-1">
-              {navigationLinks.map((link) => (
-                <Button
-                  key={link.href}
-                  variant="ghost"
-                  size="sm"
-                  asChild
-                  className="text-muted-foreground hover:text-foreground hover:bg-accent/50"
-                >
-                  <Link href={link.href}>{link.label}</Link>
-                </Button>
-              ))}
-            </nav>
-          )}
-
           {/* Right side - User menu or Auth buttons */}
           <div className="flex items-center space-x-3">
             {/* Theme Toggle */}
@@ -162,75 +144,77 @@ export function Navbar({ user }: NavbarProps) {
             </Button>
 
             {user ? (
-              <>
-                {/* Mobile Menu Button */}
-                <Button
-                  variant="ghost"
-                  size="sm"
-                  className="md:hidden h-9 w-9 rounded-full"
-                  onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-                  aria-label="Toggle mobile menu"
-                >
-                  {mobileMenuOpen ? (
-                    <X className="h-4 w-4" />
-                  ) : (
-                    <Menu className="h-4 w-4" />
-                  )}
-                </Button>
-
-                {/* User Dropdown */}
-                <DropdownMenu>
-                  <DropdownMenuTrigger asChild>
-                    <Button 
-                      variant="ghost" 
-                      className="relative h-9 w-9 rounded-full hover:bg-accent"
-                    >
-                      <Avatar className="h-8 w-8">
-                        <AvatarFallback className="bg-primary text-primary-foreground text-xs font-medium">
-                          {getInitials(user.name)}
-                        </AvatarFallback>
-                      </Avatar>
-                    </Button>
-                  </DropdownMenuTrigger>
-                  <DropdownMenuContent className="w-64" align="end" sideOffset={5}>
-                    <div className="flex items-center justify-start gap-2 p-3">
-                      <Avatar className="h-10 w-10">
-                        <AvatarFallback className="bg-primary text-primary-foreground">
-                          {getInitials(user.name)}
-                        </AvatarFallback>
-                      </Avatar>
-                      <div className="flex flex-col space-y-1 leading-none flex-1 min-w-0">
-                        <p className="font-medium truncate">{user.name}</p>
-                        <p className="text-xs text-muted-foreground truncate">{user.email}</p>
-                        <Badge variant={getRoleBadgeVariant(user.role)} className="text-xs w-fit">
-                          {getRoleLabel(user.role)}
-                        </Badge>
-                      </div>
+              <DropdownMenu>
+                <DropdownMenuTrigger asChild>
+                  <Button 
+                    variant="ghost" 
+                    className="relative h-9 w-9 rounded-full hover:bg-accent hover:ring-2 hover:ring-primary/20 transition-all duration-200"
+                  >
+                    <Avatar className="h-8 w-8">
+                      <AvatarFallback className="bg-primary text-primary-foreground text-xs font-medium">
+                        {getInitials(user.name)}
+                      </AvatarFallback>
+                    </Avatar>
+                  </Button>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent className="w-64" align="end" sideOffset={5}>
+                  <div className="flex items-center justify-start gap-2 p-3">
+                    <Avatar className="h-10 w-10">
+                      <AvatarFallback className="bg-primary text-primary-foreground">
+                        {getInitials(user.name)}
+                      </AvatarFallback>
+                    </Avatar>
+                    <div className="flex flex-col space-y-1 leading-none flex-1 min-w-0">
+                      <p className="font-medium truncate">{user.name}</p>
+                      <p className="text-xs text-muted-foreground truncate">{user.email}</p>
+                      <Badge variant={getRoleBadgeVariant(user.role)} className="text-xs w-fit">
+                        {getRoleLabel(user.role)}
+                      </Badge>
                     </div>
-                    <DropdownMenuSeparator />
+                  </div>
+                  <DropdownMenuSeparator />
+                  
+                  {/* Navigation Links */}
+                  <div className="px-1 py-1">
+                    <p className="px-2 py-1.5 text-xs font-semibold text-muted-foreground">Navigation</p>
+                    {navigationLinks.map((link) => (
+                      <DropdownMenuItem key={link.href} asChild>
+                        <Link href={link.href} className="flex items-center cursor-pointer w-full">
+                          {link.label}
+                        </Link>
+                      </DropdownMenuItem>
+                    ))}
+                  </div>
+
+                  <DropdownMenuSeparator />
+                  
+                  {/* Account Links */}
+                  <div className="px-1 py-1">
+                    <p className="px-2 py-1.5 text-xs font-semibold text-muted-foreground">Account</p>
                     <DropdownMenuItem asChild>
-                      <Link href="/profile" className="flex items-center gap-2 cursor-pointer">
+                      <Link href="/profile" className="flex items-center gap-2 cursor-pointer w-full">
                         <UserIcon className="h-4 w-4" />
                         Profile
                       </Link>
                     </DropdownMenuItem>
                     <DropdownMenuItem asChild>
-                      <Link href="/settings" className="flex items-center gap-2 cursor-pointer">
+                      <Link href="/settings" className="flex items-center gap-2 cursor-pointer w-full">
                         <Settings className="h-4 w-4" />
                         Settings
                       </Link>
                     </DropdownMenuItem>
-                    <DropdownMenuSeparator />
-                    <DropdownMenuItem 
-                      onClick={handleLogout} 
-                      className="text-destructive focus:text-destructive flex items-center gap-2 cursor-pointer"
-                    >
-                      <LogOut className="h-4 w-4" />
-                      Sign out
-                    </DropdownMenuItem>
-                  </DropdownMenuContent>
-                </DropdownMenu>
-              </>
+                  </div>
+
+                  <DropdownMenuSeparator />
+                  <DropdownMenuItem 
+                    onClick={handleLogout} 
+                    className="text-destructive focus:text-destructive flex items-center gap-2 cursor-pointer"
+                  >
+                    <LogOut className="h-4 w-4" />
+                    Sign out
+                  </DropdownMenuItem>
+                </DropdownMenuContent>
+              </DropdownMenu>
             ) : (
               <div className="flex items-center space-x-2">
                 <Button variant="ghost" size="sm" asChild>
@@ -243,26 +227,6 @@ export function Navbar({ user }: NavbarProps) {
             )}
           </div>
         </div>
-
-        {/* Mobile Navigation Menu */}
-        {user && mobileMenuOpen && (
-          <div className="md:hidden">
-            <div className="px-2 pt-2 pb-4 space-y-1 border-t border-border/40 bg-background/95">
-              {navigationLinks.map((link) => (
-                <Button
-                  key={link.href}
-                  variant="ghost"
-                  size="sm"
-                  asChild
-                  className="w-full justify-start text-muted-foreground hover:text-foreground"
-                  onClick={() => setMobileMenuOpen(false)}
-                >
-                  <Link href={link.href}>{link.label}</Link>
-                </Button>
-              ))}
-            </div>
-          </div>
-        )}
       </div>
     </header>
   )

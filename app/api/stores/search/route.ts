@@ -7,17 +7,23 @@ export async function GET(request: NextRequest) {
     const search = searchParams.get("search") || ""
     const minRating = searchParams.get("minRating") || ""
     const sortBy = searchParams.get("sortBy") || "newest"
+    const location = searchParams.get("location") || ""
 
     const stores = await prisma.store.findMany({
-      where: search
-        ? {
-            OR: [
-              { name: { contains: search, mode: "insensitive" } },
-              { description: { contains: search, mode: "insensitive" } },
-              { address: { contains: search, mode: "insensitive" } },
-            ],
-          }
-        : {},
+      where: {
+        AND: [
+          search
+            ? {
+                OR: [
+                  { name: { contains: search, mode: "insensitive" } },
+                  { description: { contains: search, mode: "insensitive" } },
+                  { address: { contains: search, mode: "insensitive" } },
+                ],
+              }
+            : {},
+          location ? { address: { contains: location, mode: "insensitive" } } : {},
+        ]
+      },
       include: {
         owner: {
           select: { name: true },
