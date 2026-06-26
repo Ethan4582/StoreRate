@@ -21,7 +21,7 @@ export async function PUT(request: NextRequest, { params }: RouteParams) {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 })
     }
 
-    const { name, description, address, phone, email, website } = await request.json()
+    const { name, description, address, phone, email, website, image } = await request.json()
 
     
     if (!name || !address) {
@@ -48,6 +48,7 @@ export async function PUT(request: NextRequest, { params }: RouteParams) {
         phone: phone || null,
         email: email || null,
         website: website || null,
+        image: image || null,
       },
     })
 
