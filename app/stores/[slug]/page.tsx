@@ -71,19 +71,7 @@ export default async function StoreDetailPage({ params }: StoreDetailPageProps) 
 
       <main className="max-w-[1600px] mx-auto px-4 md:px-8 py-8">
         
-     
-        <nav className="flex items-center gap-2 text-sm text-slate-500 mb-6 font-medium">
-          <Link href="/" className="hover:text-blue-600 transition-colors flex items-center gap-1.5">
-            <Home className="w-4 h-4 mb-0.5" />
-            Home
-          </Link>
-          <ChevronRight className="w-4 h-4 text-slate-300" />
-          <Link href="/stores" className="hover:text-blue-600 transition-colors">
-            Stores
-          </Link>
-          <ChevronRight className="w-4 h-4 text-slate-300" />
-          <span className="text-slate-900 font-semibold">{store.name}</span>
-        </nav>
+
 
        
         <div className="bg-white rounded-[24px] p-6 sm:p-8 shadow-sm border border-slate-200 mb-8 flex flex-col lg:flex-row gap-8">
