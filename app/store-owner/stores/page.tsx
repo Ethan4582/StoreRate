@@ -1,11 +1,11 @@
 import { redirect } from "next/navigation"
 import { getCurrentUser } from "@/lib/get-user"
 import { Navbar } from "@/components/navbar"
-import { StoreList } from "@/components/store-list"
-import { Button } from "@/components/ui/button"
+import { StoreList } from "@/components/store/store-list"
+import { Button } from "@/components/ui/forms/button"
 import Link from "next/link"
 import { Plus, Store, Star, Bookmark, User as UserIcon, Settings, Eye, Calendar } from "lucide-react"
-import { StoreFilters } from "@/components/store-filters"
+import { StoreFilters } from "@/components/store/store-filters"
 import { prisma } from "@/lib/db"
 
 export default async function StoreOwnerStoresPage({ searchParams }: { searchParams: any }) {
@@ -43,9 +43,9 @@ export default async function StoreOwnerStoresPage({ searchParams }: { searchPar
   let filteredStores = user.stores
   if (params?.search) {
     const q = params.search.toLowerCase()
-    filteredStores = filteredStores.filter(s => 
-      s.name.toLowerCase().includes(q) || 
-      (s.description && s.description.toLowerCase().includes(q)) || 
+    filteredStores = filteredStores.filter(s =>
+      s.name.toLowerCase().includes(q) ||
+      (s.description && s.description.toLowerCase().includes(q)) ||
       (s.address && s.address.toLowerCase().includes(q))
     )
   }
@@ -62,8 +62,8 @@ export default async function StoreOwnerStoresPage({ searchParams }: { searchPar
       <Navbar user={currentUser} />
 
       <main className="max-w-[1600px] mx-auto px-4 md:px-8 lg:px-12 py-8 flex gap-8">
-        
-        {/* Left Sidebar */}
+
+
         <div className="hidden lg:flex flex-col w-[260px] shrink-0 space-y-2 sticky top-24 self-start">
           <Link href="/store-owner/stores" className="flex items-center gap-3 px-4 py-3 bg-[#EEF2FF] text-[#4F46E5] font-semibold rounded-xl">
             <Store className="w-5 h-5" />
@@ -99,9 +99,9 @@ export default async function StoreOwnerStoresPage({ searchParams }: { searchPar
           </div>
         </div>
 
-        {/* Main Content */}
+
         <div className="flex-1 w-full space-y-8">
-          
+
           <div className="flex justify-between items-center">
             <div>
               <h1 className="text-[28px] font-bold text-[#0F172A] mb-1">My Stores</h1>
@@ -115,7 +115,6 @@ export default async function StoreOwnerStoresPage({ searchParams }: { searchPar
             </Button>
           </div>
 
-          {/* Stats Row */}
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
             <div className="bg-white border border-slate-200 rounded-2xl p-5 flex items-center gap-4 shadow-sm">
               <div className="h-12 w-12 rounded-full bg-blue-50 flex items-center justify-center shrink-0">
@@ -158,7 +157,7 @@ export default async function StoreOwnerStoresPage({ searchParams }: { searchPar
             </div>
           </div>
 
-          {/* Search and Filters Toolbar */}
+
           <StoreFilters />
 
           <StoreList ownerId={currentUser.id} storesData={filteredStores} />

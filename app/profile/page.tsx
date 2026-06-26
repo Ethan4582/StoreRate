@@ -2,11 +2,11 @@ import { redirect } from "next/navigation"
 import { getCurrentUser } from "@/lib/get-user"
 import { prisma } from "@/lib/db"
 import { Navbar } from "@/components/navbar"
-import { SidebarLayout } from "@/components/sidebar-layout"
-import { Card, CardContent } from "@/components/ui/card"
-import { Avatar, AvatarFallback } from "@/components/ui/avatar"
-import { Badge } from "@/components/ui/badge"
-import { Button } from "@/components/ui/button"
+import { SidebarLayout } from "@/components/store/sidebar-layout"
+import { Card, CardContent } from "@/components/ui/layout/card"
+import { Avatar, AvatarFallback } from "@/components/ui/display/avatar"
+import { Badge } from "@/components/ui/display/badge"
+import { Button } from "@/components/ui/forms/button"
 import Link from "next/link"
 import { format } from "date-fns"
 import { User as UserIcon, Mail, Shield, Calendar, Edit, Store, Star, Lock, PlusCircle, Bookmark, Eye, Activity } from "lucide-react"
@@ -18,18 +18,21 @@ export default async function ProfilePage() {
     redirect("/login")
   }
 
+  const userId = typeof user.id === "string" ? parseInt(user.id, 10) : user.id
+  const safeUserId = isNaN(userId) ? -1 : userId
+
   const [dbUser, storeCount, reviewCount, recentRatings, recentStores] = await Promise.all([
-    prisma.user.findUnique({ where: { id: user.id }, select: { createdAt: true } }),
-    prisma.store.count({ where: { ownerId: user.id } }),
-    prisma.rating.count({ where: { userId: user.id } }),
+    prisma.user.findUnique({ where: { id: safeUserId }, select: { createdAt: true } }),
+    prisma.store.count({ where: { ownerId: safeUserId } }),
+    prisma.rating.count({ where: { userId: safeUserId } }),
     prisma.rating.findMany({
-      where: { userId: user.id },
+      where: { userId: safeUserId },
       orderBy: { createdAt: "desc" },
       take: 3,
       include: { store: true }
     }),
     prisma.store.findMany({
-      where: { ownerId: user.id },
+      where: { ownerId: safeUserId },
       orderBy: { createdAt: "desc" },
       take: 3
     })
@@ -73,7 +76,7 @@ export default async function ProfilePage() {
             </Button>
           </div>
 
-          {/* Banner Card */}
+
           <Card className="rounded-2xl shadow-sm border-slate-200 overflow-hidden bg-white">
             <div className="h-32 bg-gradient-to-r from-blue-600 to-blue-400"></div>
             <CardContent className="px-8 pb-8 relative pt-0">
@@ -100,7 +103,7 @@ export default async function ProfilePage() {
                     </Badge>
                   </div>
                 </div>
-                {/* Quote section from mockup */}
+
                 <div className="hidden md:block w-72 mt-12 bg-slate-50 p-4 rounded-xl border border-slate-100">
                   <div className="text-blue-500 font-serif text-2xl leading-none">"</div>
                   <p className="text-sm text-slate-600 italic mt-1">Discovering great places and sharing authentic experiences.</p>
@@ -109,7 +112,6 @@ export default async function ProfilePage() {
             </CardContent>
           </Card>
 
-          {/* Stats Section */}
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
             <Card className="rounded-2xl shadow-sm border-slate-200">
               <CardContent className="p-6 flex items-center gap-4">
@@ -165,14 +167,14 @@ export default async function ProfilePage() {
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            {/* Account Details */}
+
             <Card className="rounded-2xl shadow-sm border-slate-200">
               <CardContent className="p-6">
                 <div className="flex items-center gap-2 mb-6">
                   <UserIcon className="w-5 h-5 text-blue-600" />
                   <h3 className="font-semibold text-slate-900">Account Details</h3>
                 </div>
-                
+
                 <div className="space-y-0">
                   <div className="flex items-center justify-between py-3 border-b border-slate-100">
                     <div className="flex items-center gap-3 w-1/3">
@@ -217,7 +219,7 @@ export default async function ProfilePage() {
               </CardContent>
             </Card>
 
-            {/* Security Overview */}
+
             <Card className="rounded-2xl shadow-sm border-slate-200">
               <CardContent className="p-6">
                 <div className="flex items-center gap-2 mb-6">
@@ -262,7 +264,6 @@ export default async function ProfilePage() {
             </Card>
           </div>
 
-          {/* Recent Activity */}
           <Card className="rounded-2xl shadow-sm border-slate-200">
             <CardContent className="p-6">
               <div className="flex items-center justify-between mb-6">

@@ -1,5 +1,5 @@
 import { prisma } from "@/lib/db"
-import { StoreGrid } from "@/components/store-grid"
+import { StoreGrid } from "@/components/store/store-grid"
 
 interface StoreListProps {
   ownerId?: number

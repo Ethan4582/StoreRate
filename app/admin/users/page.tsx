@@ -1,5 +1,5 @@
 import { AdminUsersList } from "@/components/admin-users-list"
-import { Button } from "@/components/ui/button"
+import { Button } from "@/components/ui/forms/button"
 import { Plus } from "lucide-react"
 import Link from "next/link"
 

@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from "react"
 import { Bookmark } from "lucide-react"
+import { toast } from "sonner"
 
 interface BookmarkButtonProps {
   storeId: number
@@ -43,9 +44,11 @@ export function BookmarkButton({ storeId }: BookmarkButtonProps) {
     if (isBookmarked) {
       savedIds = savedIds.filter(id => id !== storeId)
       setIsBookmarked(false)
+      toast.success("Store removed from bookmarks")
     } else {
       savedIds.push(storeId)
       setIsBookmarked(true)
+      toast.success("Store saved to bookmarks")
     }
 
     localStorage.setItem("savedStores", JSON.stringify(savedIds))

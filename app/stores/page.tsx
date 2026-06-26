@@ -1,6 +1,6 @@
 import { getCurrentUser } from "@/lib/get-user"
 import { Navbar } from "@/components/navbar"
-import { SearchableStoreList } from "@/components/searchable-store-list"
+import { SearchableStoreList } from "@/components/store/searchable-store-list"
 
 interface StoresPageProps {
   searchParams: Promise<{

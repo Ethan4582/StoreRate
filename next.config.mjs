@@ -9,6 +9,7 @@ const nextConfig = {
   images: {
     unoptimized: true,
   },
+  serverExternalPackages: ["pg", "@prisma/adapter-pg"],
 }
 
 export default nextConfig

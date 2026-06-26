@@ -1,6 +1,6 @@
 import { useState } from "react"
 import Link from "next/link"
-import { Button } from "@/components/ui/button"
+import { Button } from "@/components/ui/forms/button"
 import { Sun, Moon } from "lucide-react"
 import { motion } from "framer-motion"
 import { Navbar } from "@/components/navbar" 
@@ -20,7 +20,7 @@ export function HeroSection({ platformStats, scrollToFeatures, user }) {
 
   return (
     <div className={`min-h-screen w-full relative bg-white dark:bg-background`}>
-      {/* Soft Green Glow */}
+    
       <div
         className="absolute inset-0 z-0 pointer-events-none"
         style={{
@@ -29,7 +29,7 @@ export function HeroSection({ platformStats, scrollToFeatures, user }) {
           `,
         }}
       />
-      {/* Navbar */}
+    
       {user ? (
         <Navbar user={user} />
       ) : (
@@ -83,7 +83,7 @@ export function HeroSection({ platformStats, scrollToFeatures, user }) {
           </div>
         </nav>
       )}
-      {/* Hero Content */}
+   
       <div className="relative z-10 max-w-7xl mx-auto px-6 py-20 text-center flex flex-col items-center justify-center min-h-[70vh]">
         <motion.div
           initial={{ opacity: 0, y: 20 }}

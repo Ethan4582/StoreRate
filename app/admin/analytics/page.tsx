@@ -1,4 +1,4 @@
-import { AdminAnalytics } from "@/components/admin-analytics"
+import { AdminAnalytics } from "@/components/analytics/admin-analytics"
 
 export default function AdminAnalyticsPage() {
   return (

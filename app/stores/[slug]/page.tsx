@@ -1,8 +1,8 @@
 import { getCurrentUser } from "@/lib/get-user"
 import { Navbar } from "@/components/navbar"
 import { prisma } from "@/lib/db"
-import { Button } from "@/components/ui/button"
-import { Badge } from "@/components/ui/badge"
+import { Button } from "@/components/ui/forms/button"
+import { Badge } from "@/components/ui/display/badge"
 import Link from "next/link"
 import { MapPin, Phone, Globe, Star, ShieldCheck, Bookmark, Store, Tag, User as UserIcon, Languages, Clock, ShieldAlert, ChevronRight, Home } from "lucide-react"
 import { notFound } from "next/navigation"
@@ -71,7 +71,7 @@ export default async function StoreDetailPage({ params }: StoreDetailPageProps) 
 
       <main className="max-w-[1600px] mx-auto px-4 md:px-8 py-8">
         
-        {/* Breadcrumb Navigation */}
+     
         <nav className="flex items-center gap-2 text-sm text-slate-500 mb-6 font-medium">
           <Link href="/" className="hover:text-blue-600 transition-colors flex items-center gap-1.5">
             <Home className="w-4 h-4 mb-0.5" />
@@ -85,10 +85,10 @@ export default async function StoreDetailPage({ params }: StoreDetailPageProps) 
           <span className="text-slate-900 font-semibold">{store.name}</span>
         </nav>
 
-        {/* Top Header Card */}
+       
         <div className="bg-white rounded-[24px] p-6 sm:p-8 shadow-sm border border-slate-200 mb-8 flex flex-col lg:flex-row gap-8">
           
-          {/* Image & About Section */}
+       
           <div className="lg:w-[450px] shrink-0 flex flex-col gap-6">
             <div className="relative h-[300px] bg-slate-100 rounded-2xl overflow-hidden">
               <div className="absolute top-4 left-4 z-10">
@@ -112,7 +112,6 @@ export default async function StoreDetailPage({ params }: StoreDetailPageProps) 
             </div>
           </div>
 
-          {/* Header Content */}
           <div className="flex-1 flex flex-col justify-between">
             <div>
               <div className="flex flex-col sm:flex-row sm:items-start justify-between gap-4 mb-4">
@@ -165,7 +164,7 @@ export default async function StoreDetailPage({ params }: StoreDetailPageProps) 
             </div>
 
             <div>
-              {/* Contact Info Strip */}
+             
               <div className="flex flex-col sm:flex-row gap-6 py-5 border-y border-slate-100 mb-6">
                 <div className="flex items-start gap-3 flex-1">
                   <MapPin className="w-5 h-5 text-slate-400 mt-0.5 shrink-0" />
@@ -187,7 +186,7 @@ export default async function StoreDetailPage({ params }: StoreDetailPageProps) 
                 )}
               </div>
 
-              {/* Feature Tags */}
+             
               <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
                 {featureTags.map((tag, i) => {
                   const Icon = tag.icon
@@ -217,7 +216,7 @@ export default async function StoreDetailPage({ params }: StoreDetailPageProps) 
           </div>
 
           <div className="space-y-8">
-            {/* Store Info Sidebar */}
+          
             <div className="bg-white rounded-[20px] p-6 shadow-sm border border-slate-200 sticky top-24 self-start space-y-6">
               
               <div className="flex items-start gap-4">

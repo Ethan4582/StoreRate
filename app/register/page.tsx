@@ -4,12 +4,14 @@ import type React from "react"
 import { useState } from "react"
 import { useRouter } from "next/navigation"
 import Link from "next/link"
-import { Button } from "@/components/ui/button"
-import { Input } from "@/components/ui/input"
-import { Label } from "@/components/ui/label"
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
-import { Alert, AlertDescription } from "@/components/ui/alert"
+import Image from "next/image"
+import { Button } from "@/components/ui/forms/button"
+import { Input } from "@/components/ui/forms/input"
+import { Label } from "@/components/ui/forms/label"
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/forms/select"
+import { Alert, AlertDescription } from "@/components/ui/feedback/alert"
 import { Eye, EyeOff, Mail, Lock, Search, Star, Shield, User, CheckCircle2 } from "lucide-react"
+import { toast } from "sonner"
 
 export default function RegisterPage() {
   const [formData, setFormData] = useState({
@@ -62,12 +64,15 @@ export default function RegisterPage() {
       const data = await response.json()
 
       if (response.ok) {
+        toast.success("Account created successfully!")
         localStorage.setItem("user", JSON.stringify(data.user))
         router.push(data.redirect || "/stores")
       } else {
+        toast.error(data.error || "Registration failed")
         setError(data.error || "Registration failed")
       }
     } catch (error) {
+      toast.error("Network error. Please try again.")
       setError("Network error. Please try again.")
     } finally {
       setLoading(false)
@@ -76,23 +81,21 @@ export default function RegisterPage() {
 
   return (
     <div className="min-h-screen flex flex-col md:flex-row bg-white">
-      {/* Left Pane - Image and Branding (Hidden on mobile) */}
       <div className="hidden lg:flex flex-col w-[55%] xl:w-[60%] bg-[#0B1536] relative text-white overflow-hidden p-12">
-        {/* Background Image */}
-        <img 
+     
+        <Image 
           src="/login.png" 
           alt="Login Background" 
-          className="absolute inset-0 w-full h-full object-cover object-right z-0"
+          fill
+          priority
+          className="object-cover object-right z-0"
         />
         
-        {/* Content on top of background */}
+   
         <div className="relative z-10 h-full flex flex-col">
-          {/* Logo */}
-          <div className="flex items-center gap-2 mb-16">
-            <div className="bg-blue-600 text-white p-1.5 rounded-lg flex items-center justify-center font-bold text-sm h-8 w-8">
-              SR
-            </div>
-            <span className="font-bold text-xl tracking-tight">StoreRate</span>
+     
+          <div className="flex items-center mb-16">
+            <img src="/logo.png" alt="StoreRate Logo" className="h-8 w-auto" />
           </div>
 
           <div className="flex-1 flex flex-col justify-center max-w-lg">
@@ -140,9 +143,8 @@ export default function RegisterPage() {
         </div>
       </div>
 
-      {/* Right Pane - Form */}
       <div className="w-full lg:w-[45%] xl:w-[40%] flex flex-col min-h-screen relative shadow-[-10px_0_30px_-15px_rgba(0,0,0,0.1)] z-20 bg-white">
-        {/* Top Right Header */}
+      
         <div className="absolute top-8 right-8 hidden sm:block">
           <p className="text-sm text-slate-500">
             Already have an account?{" "}
@@ -152,13 +154,10 @@ export default function RegisterPage() {
           </p>
         </div>
 
-        {/* Mobile Logo & Sign In Link */}
+     
         <div className="flex justify-between items-center p-6 lg:hidden border-b border-slate-100">
-          <div className="flex items-center gap-2">
-            <div className="bg-blue-600 text-white p-1 rounded-md flex items-center justify-center font-bold text-xs h-6 w-6">
-              SR
-            </div>
-            <span className="font-bold tracking-tight text-slate-900">StoreRate</span>
+          <div className="flex items-center">
+            <img src="/logo.png" alt="StoreRate Logo" className="h-6 w-auto" />
           </div>
           <Link href="/login" className="text-sm text-blue-600 font-medium">
             Sign in
@@ -178,7 +177,7 @@ export default function RegisterPage() {
               </Alert>
             )}
 
-            {/* Row 1: Name and Email */}
+          
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
               <div className="space-y-1.5">
                 <Label htmlFor="name" className="text-sm font-medium text-slate-700">Full Name</Label>
@@ -216,7 +215,7 @@ export default function RegisterPage() {
               </div>
             </div>
 
-            {/* Row 2: Account Type */}
+         
             <div className="space-y-1.5">
               <Label htmlFor="role" className="text-sm font-medium text-slate-700">Account Type</Label>
               <Select onValueChange={(value) => setFormData({ ...formData, role: value })}>
@@ -230,7 +229,7 @@ export default function RegisterPage() {
               </Select>
             </div>
 
-            {/* Row 3: Passwords */}
+          
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
               <div className="space-y-1.5">
                 <Label htmlFor="password" className="text-sm font-medium text-slate-700">Password</Label>
@@ -285,7 +284,7 @@ export default function RegisterPage() {
               </div>
             </div>
 
-            {/* Password Requirements */}
+          
             <div className="space-y-2 mt-4 mb-2">
               <p className="text-xs font-medium text-slate-700">Your password must contain:</p>
               <ul className="space-y-1.5 text-xs">

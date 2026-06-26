@@ -1,7 +1,7 @@
 import { redirect } from "next/navigation"
 import { getCurrentUser } from "@/lib/get-user"
 import { Navbar } from "@/components/navbar"
-import { AdminSidebarLayout } from "@/components/admin-sidebar-layout"
+import { AdminSidebarLayout } from "@/components/analytics/admin-sidebar-layout"
 
 export default async function AdminLayout({
   children,

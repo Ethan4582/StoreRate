@@ -1,7 +1,7 @@
 "use client"
 
 import { useEffect, useState } from "react"
-import { StoreGrid } from "@/components/store-grid"
+import { StoreGrid } from "@/components/store/store-grid"
 
 export function SavedStoresList() {
   const [stores, setStores] = useState<any[]>([])
@@ -51,7 +51,7 @@ export function SavedStoresList() {
     const handleUpdate = () => {
       loadBookmarks()
     }
-    
+
     window.addEventListener("bookmarksUpdated", handleUpdate)
     return () => window.removeEventListener("bookmarksUpdated", handleUpdate)
   }, [])

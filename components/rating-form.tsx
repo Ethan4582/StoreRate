@@ -4,12 +4,13 @@ import type React from "react"
 
 import { useState } from "react"
 import { useRouter } from "next/navigation"
-import { Button } from "@/components/ui/button"
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
-import { Textarea } from "@/components/ui/textarea"
-import { Label } from "@/components/ui/label"
-import { Alert, AlertDescription } from "@/components/ui/alert"
+import { Button } from "@/components/ui/forms/button"
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/layout/card"
+import { Textarea } from "@/components/ui/forms/textarea"
+import { Label } from "@/components/ui/forms/label"
+import { Alert, AlertDescription } from "@/components/ui/feedback/alert"
 import { Star, Lock } from "lucide-react"
+import { toast } from "sonner"
 
 interface Store {
   id: number
@@ -67,12 +68,15 @@ export function RatingForm({ store, existingRating }: RatingFormProps) {
       const data = await response.json()
 
       if (response.ok) {
+        toast.success(existingRating ? "Rating updated successfully!" : "Rating submitted successfully!")
         router.push(`/stores/${store.slug || store.id}`)
         router.refresh()
       } else {
+        toast.error(data.error || "Failed to submit rating")
         setError(data.error || "Failed to submit rating")
       }
     } catch (error) {
+      toast.error("Network error. Please try again.")
       setError("Network error. Please try again.")
     } finally {
       setLoading(false)

@@ -1,4 +1,4 @@
-import { Button } from "@/components/ui/button"
+import { Button } from "@/components/ui/forms/button"
 import Link from "next/link"
 import { Edit, MapPin, Phone, Globe, Eye, Trash2, MoreVertical } from "lucide-react"
 

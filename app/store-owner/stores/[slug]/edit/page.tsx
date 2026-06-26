@@ -1,7 +1,7 @@
 import { redirect } from "next/navigation"
 import { getCurrentUser } from "@/lib/get-user"
 import { Navbar } from "@/components/navbar"
-import { StoreForm } from "@/components/store-form"
+import { StoreForm } from "@/components/store/store-form"
 import { prisma } from "@/lib/db"
 import { ChevronRight, Home } from "lucide-react"
 import Link from "next/link"

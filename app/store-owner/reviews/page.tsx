@@ -1,7 +1,7 @@
 import { redirect } from "next/navigation"
 import { getCurrentUser } from "@/lib/get-user"
 import { Navbar } from "@/components/navbar"
-import { StoreOwnerReviewsList } from "@/components/store-owner-reviews-list"
+import { StoreOwnerReviewsList } from "@/components/store/store-owner-reviews-list"
 
 export default async function StoreOwnerReviewsPage() {
   const user = await getCurrentUser()

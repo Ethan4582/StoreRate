@@ -1,7 +1,7 @@
 import { redirect } from "next/navigation"
 import { getCurrentUser } from "@/lib/get-user"
 import { Navbar } from "@/components/navbar"
-import { StoreForm } from "@/components/store-form"
+import { StoreForm } from "@/components/store/store-form"
 
 export default async function NewStorePage() {
   const user = await getCurrentUser()

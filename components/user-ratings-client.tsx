@@ -1,6 +1,6 @@
-import { Card, CardContent } from "@/components/ui/card"
-import { Button } from "@/components/ui/button"
-import { Badge } from "@/components/ui/badge"
+import { Card, CardContent } from "@/components/ui/layout/card"
+import { Button } from "@/components/ui/forms/button"
+import { Badge } from "@/components/ui/display/badge"
 import Link from "next/link"
 import { Star, Edit, Store, MapPin, Calendar } from "lucide-react"
 
@@ -72,7 +72,7 @@ export function UserRatingsClient({ ratings }: UserRatingsClientProps) {
         {ratings.map((rating) => (
           <Card key={rating.id} className="rounded-2xl shadow-sm hover:shadow-md transition-shadow bg-white border border-slate-200 p-0 flex flex-col sm:flex-row overflow-hidden">
             
-            {/* Image Section */}
+        
             <div className="w-full sm:w-64 shrink-0 bg-slate-100 flex items-center justify-center min-h-[200px] sm:min-h-full">
               {rating.store.image ? (
                 <img src={rating.store.image} alt={rating.store.name} className="w-full h-full object-cover" />
@@ -81,9 +81,9 @@ export function UserRatingsClient({ ratings }: UserRatingsClientProps) {
               )}
             </div>
 
-            {/* Content Section */}
+       
             <div className="p-5 sm:p-6 flex flex-col gap-4 w-full">
-              {/* Top Row: Store Info */}
+            
               <div className="flex flex-col sm:flex-row sm:items-start justify-between gap-4">
                 <div className="flex gap-4 items-start">
                   <div className="bg-blue-50 text-blue-600 p-3 rounded-xl flex-shrink-0">
@@ -105,7 +105,7 @@ export function UserRatingsClient({ ratings }: UserRatingsClientProps) {
                 </div>
               </div>
 
-              {/* Middle Row: Review Text */}
+           
               <div className="border-t border-slate-100 pt-4 flex-grow">
                 <h4 className="font-semibold text-slate-900 text-sm mb-2">Your Review</h4>
                 <p className="text-slate-600 text-base leading-relaxed">
@@ -113,7 +113,7 @@ export function UserRatingsClient({ ratings }: UserRatingsClientProps) {
                 </p>
               </div>
 
-              {/* Bottom Row: Metadata & Actions */}
+           
               <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center pt-4 mt-auto border-t border-slate-50 gap-4">
                 <div className="flex items-center text-sm text-slate-500">
                   <Calendar className="h-4 w-4 mr-2" />

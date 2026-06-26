@@ -1,7 +1,7 @@
 import { redirect } from "next/navigation"
 import { getCurrentUser } from "@/lib/get-user"
 import { Navbar } from "@/components/navbar"
-import { SidebarLayout } from "@/components/sidebar-layout"
+import { SidebarLayout } from "@/components/store/sidebar-layout"
 import { SettingsForm } from "@/components/profile-form"
 
 export default async function SettingsPage() {

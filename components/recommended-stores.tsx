@@ -34,10 +34,7 @@ export async function RecommendedStores({ currentStoreId }: RecommendedStoresPro
         </Link>
       </div>
 
-      {/* 
-        Horizontal scrollable container. 
-        Using a simple native scroll container with snap for best accessibility and touch support. 
-      */}
+     
       <div className="flex overflow-x-auto snap-x snap-mandatory gap-5 pb-4 -mx-4 px-4 sm:mx-0 sm:px-0 hide-scrollbar" style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}>
         {stores.map((store) => {
           const avgRating = store.ratings.length > 0 
@@ -85,7 +82,7 @@ export async function RecommendedStores({ currentStoreId }: RecommendedStoresPro
         })}
       </div>
       
-      {/* Invisible style to hide scrollbar for webkit */}
+      
       <style dangerouslySetInnerHTML={{__html: `
         .hide-scrollbar::-webkit-scrollbar {
           display: none;

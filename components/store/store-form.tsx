@@ -4,12 +4,13 @@ import type React from "react"
 
 import { useState } from "react"
 import { useRouter } from "next/navigation"
-import { Button } from "@/components/ui/button"
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
-import { Input } from "@/components/ui/input"
-import { Label } from "@/components/ui/label"
-import { Textarea } from "@/components/ui/textarea"
-import { Alert, AlertDescription } from "@/components/ui/alert"
+import { Button } from "@/components/ui/forms/button"
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/layout/card"
+import { Input } from "@/components/ui/forms/input"
+import { Label } from "@/components/ui/forms/label"
+import { Textarea } from "@/components/ui/forms/textarea"
+import { Alert, AlertDescription } from "@/components/ui/feedback/alert"
+import { toast } from "sonner"
 
 interface Store {
   id: number
@@ -58,11 +59,14 @@ export function StoreForm({ store }: StoreFormProps) {
       const data = await response.json()
 
       if (response.ok) {
+        toast.success(store ? "Store updated successfully!" : "Store created successfully!")
         router.push("/store-owner/stores")
       } else {
+        toast.error(data.error || "Failed to save store")
         setError(data.error || "Failed to save store")
       }
     } catch (error) {
+      toast.error("Network error. Please try again.")
       setError("Network error. Please try again.")
     } finally {
       setLoading(false)

@@ -1,4 +1,4 @@
-import { AdminDashboard } from "@/components/admin-dashboard"
+import { AdminDashboard } from "@/components/analytics/admin-dashboard"
 import { AdminUsersList } from "@/components/admin-users-list"
 
 export default function AdminPage() {
@@ -10,7 +10,7 @@ export default function AdminPage() {
       </div>
 
       <AdminDashboard />
-      
+
       <div className="pt-6">
         <div className="mb-6">
           <h2 className="text-xl font-bold">User Overview</h2>

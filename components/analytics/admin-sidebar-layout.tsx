@@ -26,7 +26,7 @@ export function AdminSidebarLayout({ children }: AdminSidebarLayoutProps) {
 
   return (
     <div className="flex flex-col md:flex-row min-h-screen w-full mx-auto">
-      {/* Sidebar */}
+    
       <aside className="w-full md:w-[260px] shrink-0 border-r border-border bg-card">
         <div className="sticky top-0 p-6 space-y-8">
           <div className="mb-2">
@@ -79,7 +79,7 @@ export function AdminSidebarLayout({ children }: AdminSidebarLayoutProps) {
         </div>
       </aside>
 
-      {/* Main Content */}
+    
       <main className="flex-1 min-w-0 bg-slate-50/50 p-6 md:p-8">
         <div className="max-w-[1200px] mx-auto">
           {children}

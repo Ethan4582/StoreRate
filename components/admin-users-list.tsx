@@ -1,19 +1,20 @@
 "use client"
 
 import { useState, useEffect } from "react"
-import { Card, CardContent } from "@/components/ui/card"
-import { Badge } from "@/components/ui/badge"
-import { Button } from "@/components/ui/button"
-import { Input } from "@/components/ui/input"
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
+import { Card, CardContent } from "@/components/ui/layout/card"
+import { Button } from "@/components/ui/forms/button"
+import { Input } from "@/components/ui/forms/input"
+import { Skeleton } from "@/components/ui/feedback/skeleton"
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/forms/select"
 import { Search, Filter, Eye, MoreVertical } from "lucide-react"
 import Link from "next/link"
+import { toast } from "sonner"
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu"
+} from "@/components/ui/navigation/dropdown-menu"
 
 interface User {
   id: number
@@ -21,6 +22,7 @@ interface User {
   email: string
   role: string
   address?: string
+  status: string
   created_at: string
   store_count: number
   rating_count: number
@@ -39,7 +41,7 @@ export function AdminUsersList() {
       const params = new URLSearchParams()
       if (search) params.append("search", search)
       if (roleFilter !== "all") params.append("role", roleFilter)
-      // Status filter is just mock since we don't have active/inactive status in DB yet
+      if (statusFilter !== "all") params.append("status", statusFilter)
 
       const response = await fetch(`/api/admin/users?${params.toString()}`)
       const data = await response.json()
@@ -56,7 +58,24 @@ export function AdminUsersList() {
 
   useEffect(() => {
     fetchUsers()
-  }, [search, roleFilter])
+  }, [search, roleFilter, statusFilter])
+
+  const handleSuspendToggle = async (userId: number, currentStatus: string) => {
+    try {
+      const res = await fetch(`/api/admin/users/${userId}/suspend`, {
+        method: "PATCH",
+      })
+
+      if (!res.ok) {
+        throw new Error("Failed to update user status")
+      }
+
+      toast.success(currentStatus === "active" ? "User suspended" : "User reactivated")
+      fetchUsers() // Refresh list
+    } catch (error: any) {
+      toast.error(error.message)
+    }
+  }
 
   const getRoleLabel = (role: string) => {
     switch (role) {
@@ -71,22 +90,9 @@ export function AdminUsersList() {
     }
   }
 
-  const getRoleBadgeVariant = (role: string) => {
-    switch (role) {
-      case "store_owner":
-        return "default" // or custom styles
-      case "normal_user":
-        return "secondary"
-      case "system_admin":
-        return "destructive"
-      default:
-        return "outline"
-    }
-  }
-
   return (
     <div className="space-y-4">
-      {/* Search and Filters */}
+    
       <div className="flex flex-col md:flex-row gap-4 items-center justify-between bg-white p-4 rounded-xl border border-border/50 shadow-sm">
         <div className="relative w-full md:max-w-md">
           <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />
@@ -123,7 +129,7 @@ export function AdminUsersList() {
               <SelectContent>
                 <SelectItem value="all">All</SelectItem>
                 <SelectItem value="active">Active</SelectItem>
-                <SelectItem value="inactive">Inactive</SelectItem>
+                <SelectItem value="suspended">Suspended</SelectItem>
               </SelectContent>
             </Select>
           </div>
@@ -135,7 +141,7 @@ export function AdminUsersList() {
         </div>
       </div>
 
-      {/* Results Table */}
+     
       <Card className="border-border/50 shadow-sm overflow-hidden">
         <div className="overflow-x-auto">
           <table className="w-full text-sm text-left">
@@ -152,11 +158,22 @@ export function AdminUsersList() {
             </thead>
             <tbody className="divide-y divide-border/50">
               {loading ? (
-                <tr>
-                  <td colSpan={7} className="px-6 py-12 text-center text-muted-foreground">
-                    Loading users...
-                  </td>
-                </tr>
+                Array.from({ length: 5 }).map((_, i) => (
+                  <tr key={`skeleton-${i}`} className="bg-white">
+                    <td className="px-6 py-4"><Skeleton className="h-4 w-32" /></td>
+                    <td className="px-6 py-4"><Skeleton className="h-4 w-40" /></td>
+                    <td className="px-6 py-4"><Skeleton className="h-4 w-48" /></td>
+                    <td className="px-6 py-4"><Skeleton className="h-6 w-24 rounded-md" /></td>
+                    <td className="px-6 py-4"><Skeleton className="h-4 w-24" /></td>
+                    <td className="px-6 py-4"><Skeleton className="h-6 w-16 rounded-sm" /></td>
+                    <td className="px-6 py-4">
+                      <div className="flex items-center justify-center gap-2">
+                        <Skeleton className="h-8 w-8 rounded-md" />
+                        <Skeleton className="h-8 w-8 rounded-md" />
+                      </div>
+                    </td>
+                  </tr>
+                ))
               ) : users.length === 0 ? (
                 <tr>
                   <td colSpan={7} className="px-6 py-12 text-center text-muted-foreground">
@@ -188,8 +205,10 @@ export function AdminUsersList() {
                       {new Date(user.created_at).toLocaleDateString()}
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap">
-                      <span className="text-[11px] font-bold uppercase tracking-wider bg-green-50 text-green-600 px-2 py-1 rounded-sm">
-                        Active
+                      <span className={`text-[11px] font-bold uppercase tracking-wider px-2 py-1 rounded-sm ${
+                        user.status === 'suspended' ? 'bg-red-50 text-red-600' : 'bg-green-50 text-green-600'
+                      }`}>
+                        {user.status || 'Active'}
                       </span>
                     </td>
                     <td className="px-6 py-4">
@@ -210,7 +229,12 @@ export function AdminUsersList() {
                               <Link href={`/admin/users/${user.id}`}>View Details</Link>
                             </DropdownMenuItem>
                             <DropdownMenuItem>Edit User</DropdownMenuItem>
-                            <DropdownMenuItem className="text-red-600">Suspend User</DropdownMenuItem>
+                            <DropdownMenuItem 
+                              className={user.status === 'suspended' ? "text-green-600" : "text-red-600"}
+                              onClick={() => handleSuspendToggle(user.id, user.status || 'active')}
+                            >
+                              {user.status === 'suspended' ? 'Reactivate User' : 'Suspend User'}
+                            </DropdownMenuItem>
                           </DropdownMenuContent>
                         </DropdownMenu>
                       </div>

@@ -4,11 +4,13 @@ import type React from "react"
 import { useState } from "react"
 import { useRouter } from "next/navigation"
 import Link from "next/link"
-import { Button } from "@/components/ui/button"
-import { Input } from "@/components/ui/input"
-import { Label } from "@/components/ui/label"
-import { Alert, AlertDescription } from "@/components/ui/alert"
+import Image from "next/image"
+import { Button } from "@/components/ui/forms/button"
+import { Input } from "@/components/ui/forms/input"
+import { Label } from "@/components/ui/forms/label"
+import { Alert, AlertDescription } from "@/components/ui/feedback/alert"
 import { Eye, EyeOff, Mail, Lock, Search, Star, Shield, Store } from "lucide-react"
+import { toast } from "sonner"
 
 export default function LoginPage() {
   const [email, setEmail] = useState("")
@@ -34,12 +36,15 @@ export default function LoginPage() {
       const data = await response.json()
 
       if (response.ok) {
+        toast.success("Successfully logged in!")
         localStorage.setItem("user", JSON.stringify(data.user))
         router.push(data.redirect || "/")
       } else {
+        toast.error(data.error || "Login failed")
         setError(data.error || "Login failed")
       }
     } catch (error) {
+      toast.error("Network error. Please try again.")
       setError("Network error. Please try again.")
     } finally {
       setLoading(false)
@@ -48,23 +53,22 @@ export default function LoginPage() {
 
   return (
     <div className="min-h-screen flex flex-col md:flex-row bg-white">
-      {/* Left Pane - Image and Branding (Hidden on mobile) */}
+      
       <div className="hidden lg:flex flex-col w-[55%] xl:w-[60%] bg-[#0B1536] relative text-white overflow-hidden p-12">
-        {/* Background Image */}
-        <img 
+    
+        <Image 
           src="/login.png" 
           alt="Login Background" 
-          className="absolute inset-0 w-full h-full object-cover object-right z-0"
+          fill
+          priority
+          className="object-cover object-right z-0"
         />
         
-        {/* Content on top of background */}
+
         <div className="relative z-10 h-full flex flex-col">
-          {/* Logo */}
-          <div className="flex items-center gap-2 mb-16">
-            <div className="bg-blue-600 text-white p-1.5 rounded-lg flex items-center justify-center font-bold text-sm h-8 w-8">
-              SR
-            </div>
-            <span className="font-bold text-xl tracking-tight">StoreRate</span>
+     
+          <div className="flex items-center mb-16">
+            <img src="/logo.png" alt="StoreRate Logo" className="h-8 w-auto" />
           </div>
 
           <div className="flex-1 flex flex-col justify-center max-w-lg">
@@ -78,7 +82,7 @@ export default function LoginPage() {
             </p>
 
             <div className="space-y-8">
-              {/* Feature 1 */}
+           
               <div className="flex items-start gap-4">
                 <div className="bg-[#0B1536]/60 p-3 rounded-xl backdrop-blur-md border border-white/10 shadow-sm">
                   <Search className="w-6 h-6 text-blue-400" />
@@ -89,7 +93,7 @@ export default function LoginPage() {
                 </div>
               </div>
               
-              {/* Feature 2 */}
+              
               <div className="flex items-start gap-4">
                 <div className="bg-[#0B1536]/60 p-3 rounded-xl backdrop-blur-md border border-white/10 shadow-sm">
                   <Star className="w-6 h-6 text-blue-400" />
@@ -100,7 +104,7 @@ export default function LoginPage() {
                 </div>
               </div>
               
-              {/* Feature 3 */}
+            
               <div className="flex items-start gap-4">
                 <div className="bg-[#0B1536]/60 p-3 rounded-xl backdrop-blur-md border border-white/10 shadow-sm">
                   <Shield className="w-6 h-6 text-blue-400" />
@@ -115,9 +119,9 @@ export default function LoginPage() {
         </div>
       </div>
 
-      {/* Right Pane - Form */}
+    
       <div className="w-full lg:w-[45%] xl:w-[40%] flex flex-col min-h-screen relative shadow-[-10px_0_30px_-15px_rgba(0,0,0,0.1)] z-20 bg-white">
-        {/* Top Right Header */}
+    
         <div className="absolute top-8 right-8 hidden sm:block">
           <p className="text-sm text-slate-500">
             Don't have an account?{" "}
@@ -127,13 +131,10 @@ export default function LoginPage() {
           </p>
         </div>
 
-        {/* Mobile Logo & Sign Up Link */}
+   
         <div className="flex justify-between items-center p-6 lg:hidden border-b border-slate-100">
-          <div className="flex items-center gap-2">
-            <div className="bg-blue-600 text-white p-1 rounded-md flex items-center justify-center font-bold text-xs h-6 w-6">
-              SR
-            </div>
-            <span className="font-bold tracking-tight text-slate-900">StoreRate</span>
+          <div className="flex items-center">
+            <img src="/logo.png" alt="StoreRate Logo" className="h-6 w-auto" />
           </div>
           <Link href="/register" className="text-sm text-blue-600 font-medium">
             Sign up

@@ -63,23 +63,6 @@ export default async function RateStorePage({ params }: RateStorePageProps) {
 
       <main className="flex-1 w-full max-w-[1200px] mx-auto px-4 sm:px-6 lg:px-8 py-8 lg:py-12">
         
-        {/* Breadcrumb Navigation */}
-        <nav className="flex items-center gap-2 text-sm text-slate-500 mb-8 font-medium">
-          <Link href="/" className="hover:text-blue-600 transition-colors flex items-center gap-1.5">
-            <Home className="w-4 h-4 mb-0.5" />
-            Home
-          </Link>
-          <ChevronRight className="w-4 h-4 text-slate-300" />
-          <Link href="/stores" className="hover:text-blue-600 transition-colors">
-            Stores
-          </Link>
-          <ChevronRight className="w-4 h-4 text-slate-300" />
-          <Link href={`/stores/${store.slug}`} className="hover:text-blue-600 transition-colors truncate max-w-[150px] sm:max-w-[200px]">
-            {store.name}
-          </Link>
-          <ChevronRight className="w-4 h-4 text-slate-300" />
-          <span className="text-slate-900 font-semibold truncate">Write a Review</span>
-        </nav>
 
         <div className="mb-8">
           <h1 className="text-3xl md:text-4xl font-extrabold text-foreground tracking-tight mb-2">
@@ -89,7 +72,7 @@ export default async function RateStorePage({ params }: RateStorePageProps) {
         </div>
 
         <div className="grid grid-cols-1 lg:grid-cols-[1fr_450px] gap-8">
-          {/* Left Column: Store Info Card */}
+     
           <div className="bg-card rounded-2xl border border-border/50 shadow-sm overflow-hidden flex flex-col">
             <div className="relative w-full h-48 md:h-64 bg-muted">
               {store.image ? (
@@ -156,7 +139,7 @@ export default async function RateStorePage({ params }: RateStorePageProps) {
             </div>
           </div>
 
-          {/* Right Column: Rating Form */}
+       
           <div className="w-full">
             <RatingForm store={store} existingRating={existingRating} />
           </div>

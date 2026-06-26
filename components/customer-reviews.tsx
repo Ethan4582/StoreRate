@@ -2,8 +2,8 @@
 
 import { useState } from "react"
 import { Star, MoreVertical, ChevronDown, ChevronUp } from "lucide-react"
-import { Progress } from "@/components/ui/progress"
-import { Badge } from "@/components/ui/badge"
+import { Progress } from "@/components/ui/feedback/progress"
+import { Badge } from "@/components/ui/display/badge"
 
 interface CustomerReviewsProps {
   reviews: any[]

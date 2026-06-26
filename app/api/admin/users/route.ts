@@ -15,23 +15,34 @@ export async function GET(request: NextRequest) {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 })
     }
 
-    const { searchParams } = new URL(request.url)
+    const searchParams = new URL(request.url).searchParams
     const search = searchParams.get("search") || ""
     const role = searchParams.get("role") || ""
+    const status = searchParams.get("status") || ""
     const sortBy = searchParams.get("sortBy") || "newest"
 
+    const whereClause: any = {
+      role: { not: "system_admin" },
+    }
+
+    if (search) {
+      whereClause.OR = [
+        { name: { contains: search, mode: "insensitive" } },
+        { email: { contains: search, mode: "insensitive" } },
+        { address: { contains: search, mode: "insensitive" } },
+      ]
+    }
+
+    if (role && role !== "all") {
+      whereClause.role = role
+    }
+
+    if (status && status !== "all") {
+      whereClause.status = status
+    }
+
     const users = await prisma.user.findMany({
-      where: {
-        role: { not: "system_admin" },
-        ...(search && {
-          OR: [
-            { name: { contains: search, mode: "insensitive" } },
-            { email: { contains: search, mode: "insensitive" } },
-            { address: { contains: search, mode: "insensitive" } },
-          ],
-        }),
-        ...(role && { role: role as any }),
-      },
+      where: whereClause,
       include: {
         stores: { select: { id: true } },
         ratings: { select: { id: true } },

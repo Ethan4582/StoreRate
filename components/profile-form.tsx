@@ -4,12 +4,13 @@ import type React from "react"
 
 import { useState } from "react"
 import { useRouter } from "next/navigation"
-import { Button } from "@/components/ui/button"
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
-import { Input } from "@/components/ui/input"
-import { Label } from "@/components/ui/label"
-import { Alert, AlertDescription } from "@/components/ui/alert"
+import { Button } from "@/components/ui/forms/button"
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/layout/card"
+import { Input } from "@/components/ui/forms/input"
+import { Label } from "@/components/ui/forms/label"
+import { Alert, AlertDescription } from "@/components/ui/feedback/alert"
 import type { User } from "@/lib/auth"
+import { toast } from "sonner"
 
 interface ProfileFormProps {
   user: User
@@ -67,6 +68,7 @@ export function SettingsForm({ user }: ProfileFormProps) {
       const data = await response.json()
 
       if (response.ok) {
+        toast.success("Settings updated successfully")
         setMessage("Settings updated successfully")
         setFormData({
           ...formData,
@@ -76,9 +78,11 @@ export function SettingsForm({ user }: ProfileFormProps) {
         })
         router.refresh()
       } else {
+        toast.error(data.error || "Failed to update settings")
         setError(data.error || "Failed to update settings")
       }
     } catch (error) {
+      toast.error("Network error. Please try again.")
       setError("Network error. Please try again.")
     } finally {
       setLoading(false)
@@ -99,7 +103,7 @@ export function SettingsForm({ user }: ProfileFormProps) {
         </Alert>
       )}
 
-      {/* Personal Information Section */}
+     
       <Card className="rounded-2xl shadow-sm border-slate-200 overflow-hidden bg-white">
         <CardHeader className="bg-slate-50/50 border-b border-slate-100 pb-4">
           <CardTitle className="text-lg text-slate-900">Personal Information</CardTitle>
@@ -133,7 +137,7 @@ export function SettingsForm({ user }: ProfileFormProps) {
         </CardContent>
       </Card>
 
-      {/* Password & Security Section */}
+      
       <Card className="rounded-2xl shadow-sm border-slate-200 overflow-hidden bg-white">
         <CardHeader className="bg-slate-50/50 border-b border-slate-100 pb-4">
           <CardTitle className="text-lg text-slate-900">Password & Security</CardTitle>

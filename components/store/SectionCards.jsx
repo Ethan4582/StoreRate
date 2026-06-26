@@ -1,4 +1,4 @@
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/layout/card"
 import { Users, Store, Star, AlertCircle } from "lucide-react"
 
 export function SectionCards() {

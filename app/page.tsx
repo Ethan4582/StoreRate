@@ -1,36 +1,23 @@
 import Link from "next/link"
-import Image from "next/image"
 import { prisma } from "@/lib/db"
 import { getCurrentUser } from "@/lib/get-user"
 import { Navbar } from "@/components/navbar"
-import { Star, MapPin, ArrowRight, Users } from "lucide-react"
-import { Button } from "@/components/ui/button"
+import { Star, MapPin, Search, ArrowRight, Facebook, Instagram, Twitter, User } from "lucide-react"
 
 async function getTopRatedStores() {
   const stores = await prisma.store.findMany({
-    include: {
-      ratings: {
-        select: { rating: true, review: true, user: { select: { name: true } } },
-      },
-      owner: { select: { name: true } },
-    },
+    include: { ratings: { select: { rating: true, review: true } } },
     take: 20,
   })
-
   return stores
     .map((store) => {
       const count = store.ratings.length
-      const avg =
-        count > 0
-          ? store.ratings.reduce((sum, r) => sum + r.rating, 0) / count
-          : 0
-      const topTag = store.ratings
-        .flatMap((r) => (r.review ? r.review.split(" ").slice(0, 2).join(" ") : []))
-        .find(Boolean)
+      const avg = count > 0 ? store.ratings.reduce((s, r) => s + r.rating, 0) / count : 0
+      const topTag = store.ratings.flatMap((r) => (r.review ? [r.review.split(" ").slice(0, 2).join(" ")] : [])).find(Boolean)
       return { ...store, avgRating: avg, reviewCount: count, topTag }
     })
     .sort((a, b) => b.avgRating - a.avgRating || b.reviewCount - a.reviewCount)
-    .slice(0, 8)
+    .slice(0, 10)
 }
 
 export default async function HomePage() {
@@ -38,179 +25,125 @@ export default async function HomePage() {
   const topStores = await getTopRatedStores()
 
   return (
-    <div className="min-h-screen bg-white flex flex-col">
+    <div className="min-h-screen bg-slate-50 flex flex-col">
       <Navbar user={user} />
 
-      {/* ── HERO ─────────────────────────────────────────────── */}
-      <section className="relative overflow-hidden bg-white">
-        <div className="max-w-7xl mx-auto px-6 lg:px-8 py-16 lg:py-24">
-          <div className="grid lg:grid-cols-2 gap-12 items-center">
-            {/* Left copy */}
-            <div>
-              <h1 className="text-5xl lg:text-6xl font-extrabold text-slate-900 leading-tight mb-5">
-                Discover. Rate.{" "}
-                <span className="text-blue-600">Trust Local Stores.</span>
-              </h1>
-              <p className="text-slate-500 text-lg leading-relaxed mb-8 max-w-md">
-                StoreRate helps you find great stores, share honest reviews, and
-                make better choices—together.
-              </p>
-              <div className="flex items-center gap-4 flex-wrap">
-                <Button
-                  asChild
-                  size="lg"
-                  className="bg-blue-600 hover:bg-blue-700 text-white rounded-xl px-7 font-semibold"
-                >
-                  <Link href="/stores">
-                    Browse Stores <ArrowRight className="ml-2 w-4 h-4" />
-                  </Link>
-                </Button>
-                {!user && (
-                  <Button
-                    asChild
-                    variant="outline"
-                    size="lg"
-                    className="rounded-xl px-7 font-semibold border-slate-200"
-                  >
-                    <Link href="/register">
-                      Sign Up <Users className="ml-2 w-4 h-4" />
-                    </Link>
-                  </Button>
-                )}
-              </div>
+    
+      <section className="relative w-full h-[600px] flex items-center justify-center">
+     
+        <div className="absolute inset-0 z-0">
+          <img src="/hero_bg.png" alt="Hero Background" className="w-full h-full object-cover" />
+          <div className="absolute inset-0 bg-white/75 backdrop-blur-[1px]"></div>
+      
+          <div className="absolute bottom-0 left-0 right-0 h-32 bg-gradient-to-t from-slate-50 to-transparent"></div>
+        </div>
 
-              {/* Social proof */}
-              <div className="mt-10 flex items-center gap-3">
-                <div className="flex -space-x-2">
-                  {["1", "2", "3", "4"].map((n) => (
-                    <div
-                      key={n}
-                      className="w-8 h-8 rounded-full border-2 border-white bg-blue-100 flex items-center justify-center text-xs font-bold text-blue-600 overflow-hidden"
-                    >
-                      <img
-                        src={`/${n}.png`}
-                        alt=""
-                        className="w-full h-full object-cover"
-                        onError={(e) => {
-                          ;(e.target as HTMLImageElement).style.display = "none"
-                        }}
-                      />
-                    </div>
-                  ))}
-                </div>
-                <p className="text-sm text-slate-500">
-                  Join thousands of users rating local stores
-                </p>
-              </div>
-            </div>
+        <div className="relative z-10 w-full max-w-screen-md mx-auto px-6 text-center flex flex-col items-center mt-[-40px]">
+    
+          <div className="inline-flex items-center gap-2 bg-white px-4 py-1.5 rounded-full border border-slate-200 shadow-sm mb-6">
+            <Star className="w-4 h-4 text-blue-600 fill-blue-600" />
+            <span className="text-sm font-medium text-slate-700">Trusted by 10,000+ shoppers</span>
+          </div>
 
-            {/* Right asset */}
-            <div className="relative flex justify-center lg:justify-end">
-              <div className="relative w-full max-w-lg">
-                <img
-                  src="/hero_asset.png"
-                  alt="StoreRate platform preview"
-                  className="w-full h-auto object-contain drop-shadow-xl"
-                />
-              </div>
+          <h1 className="text-5xl lg:text-6xl font-extrabold text-slate-900 leading-[1.15] mb-6">
+            Discover. Rate. Trust<br />
+            <span className="text-blue-600">Local Stores.</span>
+          </h1>
+          
+          <p className="text-slate-700 text-lg mb-10 max-w-xl mx-auto font-medium">
+            Find amazing local stores, share honest reviews, and make better choices—together.
+          </p>
+
+      
+          <div className="flex flex-col sm:flex-row items-center w-full max-w-3xl bg-white rounded-3xl sm:rounded-full p-2 shadow-xl border border-slate-100">
+            <div className="flex items-center flex-1 px-4 w-full">
+              <Search className="w-5 h-5 text-slate-400 mr-3" />
+              <input 
+                type="text" 
+                placeholder="Search stores, categories, or locations" 
+                className="w-full h-12 bg-transparent outline-none text-slate-700 placeholder:text-slate-400 font-medium" 
+              />
             </div>
+            <div className="hidden sm:block w-px h-8 bg-slate-200 mx-2"></div>
+            <div className="flex items-center flex-1 px-4 w-full border-t sm:border-t-0 border-slate-100 mt-2 sm:mt-0 pt-2 sm:pt-0">
+              <MapPin className="w-5 h-5 text-slate-400 mr-3" />
+              <input 
+                type="text" 
+                placeholder="Near me" 
+                className="w-full h-12 bg-transparent outline-none text-slate-700 placeholder:text-slate-400 font-medium" 
+              />
+            </div>
+            <button className="w-full sm:w-auto mt-3 sm:mt-0 bg-blue-600 hover:bg-blue-700 text-white h-12 px-8 rounded-full font-bold transition-colors shrink-0">
+              Explore Stores
+            </button>
           </div>
         </div>
       </section>
 
-      {/* ── TOP RATED STORES ─────────────────────────────────── */}
-      <section className="bg-slate-50 py-16 flex-1">
-        <div className="max-w-7xl mx-auto px-6 lg:px-8">
-          {/* Section header */}
-          <div className="flex items-center justify-between mb-10">
-            <h2 className="text-2xl font-bold text-slate-900">
-              Top Rated Stores
-            </h2>
-            <Link
-              href="/stores"
-              className="text-sm font-medium text-blue-600 hover:text-blue-700 flex items-center gap-1 transition-colors"
-            >
-              View all stores <ArrowRight className="w-4 h-4" />
+     
+      <section className="w-full py-20 bg-slate-50 relative z-10">
+        <div className="w-full max-w-screen-xl mx-auto px-6 xl:px-12">
+
+          <div className="flex flex-col sm:flex-row sm:items-end justify-between mb-10 gap-4">
+            <div>
+              <h2 className="text-3xl font-bold text-slate-900 mb-2">Top Rated Stores</h2>
+              <p className="text-slate-500 font-medium">Explore top-rated local stores<br className="hidden sm:block" /> based on real customer reviews.</p>
+            </div>
+            <Link href="/stores" className="text-sm font-bold text-blue-600 hover:text-blue-700 flex items-center gap-1 transition-colors group">
+              View all stores <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
             </Link>
           </div>
 
           {topStores.length === 0 ? (
-            <div className="text-center py-20 text-slate-400">
-              <p className="text-lg">No stores yet.</p>
-              <p className="text-sm mt-1">
-                Be the first to{" "}
-                <Link href="/stores" className="text-blue-600 hover:underline">
-                  add a store
-                </Link>
-                !
-              </p>
+            <div className="text-center py-24 text-slate-400">
+              <p className="text-base">No stores yet — be the first to <Link href="/stores" className="text-blue-600 underline">add one</Link>!</p>
             </div>
           ) : (
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div className="flex gap-6 overflow-x-auto pb-8 snap-x snap-mandatory">
               {topStores.map((store) => (
                 <Link
                   key={store.id}
                   href={`/stores/${store.slug}`}
-                  className="group bg-white rounded-2xl border border-slate-100 overflow-hidden hover:shadow-md hover:border-blue-100 transition-all duration-200 flex flex-col"
+                  className="group flex-none w-[320px] bg-white rounded-2xl border border-slate-100 shadow-sm hover:shadow-xl hover:shadow-blue-500/5 transition-all duration-300 flex flex-col snap-start overflow-hidden"
                 >
-                  {/* Store image */}
-                  <div className="relative h-48 w-full bg-slate-100 overflow-hidden">
+          
+                  <div className="relative h-[200px] w-full bg-slate-100 overflow-hidden">
                     {store.image ? (
-                      <img
-                        src={store.image}
-                        alt={store.name}
-                        className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
-                      />
+                      <img src={store.image} alt={store.name} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
                     ) : (
                       <div className="w-full h-full flex items-center justify-center bg-gradient-to-br from-blue-50 to-slate-100">
-                        <div className="text-4xl font-bold text-blue-200">
-                          {store.name.charAt(0)}
-                        </div>
+                        <span className="text-6xl font-extrabold text-blue-200">{store.name.charAt(0)}</span>
                       </div>
                     )}
+                
+                    <div className="absolute top-4 right-4 bg-white px-2.5 py-1 rounded-full flex items-center gap-1.5 shadow-md">
+                      <Star className="w-3.5 h-3.5 fill-yellow-400 text-yellow-400" />
+                      <span className="text-sm font-bold text-slate-900">{store.avgRating > 0 ? store.avgRating.toFixed(1) : "—"}</span>
+                    </div>
                   </div>
 
-                  {/* Store info */}
-                  <div className="p-5 flex flex-col gap-2 flex-1">
-                    <div className="flex items-start justify-between gap-2">
-                      <div>
-                        <h3 className="font-semibold text-slate-900 text-base leading-snug group-hover:text-blue-600 transition-colors">
-                          {store.name}
-                        </h3>
-                        {store.description && (
-                          <p className="text-xs text-slate-400 mt-0.5 line-clamp-1">
-                            {store.description}
-                          </p>
-                        )}
-                      </div>
-                    </div>
-
-                    <div className="flex items-center gap-1.5 text-sm text-slate-500">
-                      <MapPin className="w-3.5 h-3.5 text-slate-400 shrink-0" />
+        
+                  <div className="p-6 flex flex-col flex-1">
+                    <h3 className="font-bold text-lg text-slate-900 mb-1.5 truncate group-hover:text-blue-600 transition-colors">{store.name}</h3>
+                    <div className="flex items-center gap-2 text-sm text-slate-500 mb-5 truncate font-medium">
+                      <span>Store</span>
+                      <span className="w-1 h-1 rounded-full bg-slate-300"></span>
                       <span className="truncate">{store.address}</span>
                     </div>
 
-                    <div className="flex items-center justify-between mt-auto pt-2">
-                      {/* Rating */}
-                      <div className="flex items-center gap-1.5">
-                        <Star className="w-4 h-4 fill-yellow-400 text-yellow-400" />
-                        <span className="text-sm font-semibold text-slate-800">
-                          {store.avgRating > 0
-                            ? store.avgRating.toFixed(1)
-                            : "—"}
-                        </span>
-                        <span className="text-xs text-slate-400">
-                          ({store.reviewCount}{" "}
-                          {store.reviewCount === 1 ? "review" : "reviews"})
-                        </span>
-                      </div>
-
-                      {/* Top tag from a review */}
+                
+                    <div className="flex flex-wrap gap-2 mb-6">
                       {store.topTag && (
-                        <span className="text-xs bg-blue-50 text-blue-600 border border-blue-100 rounded-full px-2.5 py-0.5 font-medium truncate max-w-[120px]">
-                          {store.topTag}
-                        </span>
+                        <span className="text-xs bg-slate-50 text-slate-600 border border-slate-100 rounded-md px-3 py-1 font-semibold">{store.topTag}</span>
                       )}
+                      <span className="text-xs bg-slate-50 text-slate-600 border border-slate-100 rounded-md px-3 py-1 font-semibold">Verified</span>
+                    </div>
+                    <div className="flex items-center justify-between mt-auto pt-4 border-t border-slate-100">
+                      <div className="flex items-center gap-1.5 text-slate-500 text-sm font-semibold">
+                        <User className="w-4 h-4" />
+                        <span>{store.reviewCount} Reviews</span>
+                      </div>
+                      <span className="text-sm font-bold text-green-600">Open Now</span>
                     </div>
                   </div>
                 </Link>
@@ -220,55 +153,72 @@ export default async function HomePage() {
         </div>
       </section>
 
-      {/* ── FOOTER ───────────────────────────────────────────── */}
-      <footer className="bg-white border-t border-slate-100 py-10">
-        <div className="max-w-7xl mx-auto px-6 lg:px-8">
-          <div className="flex flex-col md:flex-row items-center justify-between gap-6">
-            {/* Brand */}
-            <div className="flex items-center gap-2">
-              <div className="h-8 w-8 rounded-lg bg-blue-600 flex items-center justify-center">
-                <span className="text-white font-bold text-sm">SR</span>
+  
+      <footer className="w-full bg-white border-t border-slate-200 mt-auto">
+        <div className="w-full max-w-screen-xl mx-auto px-6 xl:px-12 py-16">
+          <div className="flex flex-col lg:flex-row justify-between gap-12">
+         
+            <div className="lg:w-1/3">
+              <div className="flex items-center mb-6">
+                <img src="/logo.png" alt="StoreRate Logo" className="h-8 w-auto" />
               </div>
+              <p className="text-sm text-slate-500 leading-relaxed max-w-[250px] mb-8 font-medium">
+                Discover. Rate. Trust Local Stores.
+              </p>
+              <p className="text-sm text-slate-500 mb-6 font-medium">
+                © {new Date().getFullYear()} StoreRate. All rights reserved.
+              </p>
+              <div className="flex items-center gap-4">
+                <a href="#" className="text-slate-400 hover:text-blue-600 transition-colors">
+                  <Facebook className="w-5 h-5" />
+                </a>
+                <a href="#" className="text-slate-400 hover:text-blue-600 transition-colors">
+                  <Instagram className="w-5 h-5" />
+                </a>
+                <a href="#" className="text-slate-400 hover:text-blue-600 transition-colors">
+                  <Twitter className="w-5 h-5" />
+                </a>
+              </div>
+            </div>
+
+          
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-8 lg:w-2/3">
               <div>
-                <p className="font-bold text-slate-900 leading-tight">
-                  StoreRate
-                </p>
-                <p className="text-xs text-slate-400">
-                  Discover. Rate. Trust Local Stores.
-                </p>
+                <p className="text-sm font-bold text-slate-900 mb-6">Quick Links</p>
+                <ul className="space-y-4 text-sm text-slate-500 font-medium">
+                  <li><Link href="/stores" className="hover:text-blue-600 transition-colors">Browse Stores</Link></li>
+                  <li><Link href="#" className="hover:text-blue-600 transition-colors">How It Works</Link></li>
+                  <li><Link href="#" className="hover:text-blue-600 transition-colors">About Us</Link></li>
+                  <li><Link href="#" className="hover:text-blue-600 transition-colors">Contact</Link></li>
+                </ul>
+              </div>
+
+              <div>
+                <p className="text-sm font-bold text-slate-900 mb-6">For Users</p>
+                <ul className="space-y-4 text-sm text-slate-500 font-medium">
+                  <li><Link href="/register" className="hover:text-blue-600 transition-colors">Sign Up</Link></li>
+                  <li><Link href="/login" className="hover:text-blue-600 transition-colors">Log In</Link></li>
+                  <li><Link href="/my-reviews" className="hover:text-blue-600 transition-colors">My Reviews</Link></li>
+                </ul>
+              </div>
+
+              <div>
+                <p className="text-sm font-bold text-slate-900 mb-6">For Store Owners</p>
+                <ul className="space-y-4 text-sm text-slate-500 font-medium">
+                  <li><Link href="/store-owner/stores" className="hover:text-blue-600 transition-colors">Register Store</Link></li>
+                  <li><Link href="/login" className="hover:text-blue-600 transition-colors">Store Login</Link></li>
+                </ul>
+              </div>
+
+              <div>
+                <p className="text-sm font-bold text-slate-900 mb-6">Legal</p>
+                <ul className="space-y-4 text-sm text-slate-500 font-medium">
+                  <li><Link href="#" className="hover:text-blue-600 transition-colors">Terms of Service</Link></li>
+                  <li><Link href="#" className="hover:text-blue-600 transition-colors">Privacy Policy</Link></li>
+                  <li><Link href="#" className="hover:text-blue-600 transition-colors">Cookie Policy</Link></li>
+                </ul>
               </div>
             </div>
-
-            {/* Links */}
-            <div className="flex items-center gap-6 text-sm text-slate-500">
-              <Link
-                href="/stores"
-                className="hover:text-blue-600 transition-colors"
-              >
-                Browse Stores
-              </Link>
-              {!user && (
-                <>
-                  <Link
-                    href="/register"
-                    className="hover:text-blue-600 transition-colors"
-                  >
-                    Sign Up
-                  </Link>
-                  <Link
-                    href="/login"
-                    className="hover:text-blue-600 transition-colors"
-                  >
-                    Log In
-                  </Link>
-                </>
-              )}
-            </div>
-
-            {/* Copyright */}
-            <p className="text-xs text-slate-400">
-              © {new Date().getFullYear()} StoreRate. All rights reserved.
-            </p>
           </div>
         </div>
       </footer>

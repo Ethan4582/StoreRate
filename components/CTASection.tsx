@@ -1,5 +1,5 @@
 import React from 'react'
-import { Button } from './ui/button'
+import { Button } from "./ui/forms/button"
 import Link from 'next/link'
 import { motion } from "framer-motion";
 const CTASection = () => {
