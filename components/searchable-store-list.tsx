@@ -8,7 +8,8 @@ import { Input } from "@/components/ui/input"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import Link from "next/link"
 import Image from "next/image"
-import { Search, MapPin, Phone, Mail, Globe, Heart, Filter, ChevronLeft, ChevronRight, LayoutGrid, List } from "lucide-react"
+import { Search, MapPin, Phone, Mail, Globe, Filter, ChevronLeft, ChevronRight, LayoutGrid, List } from "lucide-react"
+import { BookmarkButton } from "@/components/bookmark-button"
 
 interface Store {
   id: number
@@ -248,9 +249,7 @@ export function SearchableStoreList({
                 {/* Image Section */}
                 <div className={`relative shrink-0 bg-gray-50 ${viewMode === "grid" ? "w-full md:w-[45%] h-64 md:h-auto" : "w-full sm:w-[30%] lg:w-[25%] h-48 sm:h-auto"}`}>
                   <div className="absolute top-4 left-4 z-10">
-                    <Button variant="secondary" size="icon" className="h-8 w-8 rounded-full bg-white text-gray-500 hover:text-red-500 shadow-sm border border-gray-100">
-                      <Heart className="h-4 w-4" />
-                    </Button>
+                    <BookmarkButton storeId={store.id} />
                   </div>
                   {store.image ? (
                     <img
