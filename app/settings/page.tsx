@@ -1,7 +1,7 @@
 import { redirect } from "next/navigation"
 import { getCurrentUser } from "@/lib/get-user"
 import { Navbar } from "@/components/navbar"
-import { ProfileForm } from "@/components/profile-form"
+import { SettingsForm } from "@/components/profile-form"
 
 export default async function SettingsPage() {
   const user = await getCurrentUser()
@@ -11,17 +11,16 @@ export default async function SettingsPage() {
   }
 
   return (
-    <div className="min-h-screen bg-background">
+    <div className="min-h-screen bg-slate-50">
       <Navbar user={user} />
 
-      <main className="container mx-auto px-4 py-8 max-w-2xl">
+      <main className="container mx-auto px-4 py-8 max-w-4xl">
         <div className="mb-8">
-          <h1 className="text-3xl font-bold text-foreground mb-2">Settings</h1>
-          <p className="text-muted-foreground">Manage your app settings and preferences</p>
+          <h1 className="text-3xl font-extrabold tracking-tight text-slate-900 mb-2">Account Settings</h1>
+          <p className="text-slate-500">Manage your account preferences, personal information, and security</p>
         </div>
 
-        {/* Reusing the existing ProfileForm as requested to avoid new features/clustering */}
-        <ProfileForm user={user} />
+        <SettingsForm user={user} />
       </main>
     </div>
   )

@@ -9,7 +9,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Textarea } from "@/components/ui/textarea"
 import { Label } from "@/components/ui/label"
 import { Alert, AlertDescription } from "@/components/ui/alert"
-import { Star } from "lucide-react"
+import { Star, Lock } from "lucide-react"
 
 interface Store {
   id: number
@@ -102,32 +102,20 @@ export function RatingForm({ store, existingRating }: RatingFormProps) {
   }
 
   return (
-    <Card>
-      <CardHeader>
-        {/* Store Image */}
-        {store.image && (
-          <img
-            src={store.image}
-            alt={store.name}
-            className="mb-3 rounded-md w-full h-40 object-cover"
-          />
-        )}
-        <CardTitle>{store.name}</CardTitle>
-        <CardDescription>{store.address}</CardDescription>
-      </CardHeader>
-      <CardContent>
-        <form onSubmit={handleSubmit} className="space-y-6">
+    <Card className="rounded-2xl border-border/50 shadow-sm border">
+      <CardContent className="p-6 md:p-8">
+        <form onSubmit={handleSubmit} className="space-y-8">
           {error && (
             <Alert variant="destructive">
               <AlertDescription>{error}</AlertDescription>
             </Alert>
           )}
 
-          <div className="space-y-3">
-            <Label>Your Rating *</Label>
-            <div className="flex gap-1">{renderStars()}</div>
+          <div className="space-y-4">
+            <Label className="text-base font-semibold">Your Rating *</Label>
+            <div className="flex gap-1.5">{renderStars()}</div>
             {rating > 0 && (
-              <p className="text-sm text-muted-foreground">
+              <p className="text-sm font-medium text-muted-foreground mt-2">
                 {rating === 1 && "Poor"}
                 {rating === 2 && "Fair"}
                 {rating === 3 && "Good"}
@@ -137,24 +125,38 @@ export function RatingForm({ store, existingRating }: RatingFormProps) {
             )}
           </div>
 
-          <div className="space-y-2">
-            <Label htmlFor="review">Your Review (Optional)</Label>
-            <Textarea
-              id="review"
-              value={review}
-              onChange={(e) => setReview(e.target.value)}
-              placeholder="Share your experience with this store..."
-              rows={4}
-            />
+          <div className="space-y-3">
+            <Label htmlFor="review" className="text-base font-semibold">Your Review (Optional)</Label>
+            <div className="relative">
+              <Textarea
+                id="review"
+                value={review}
+                onChange={(e) => setReview(e.target.value)}
+                placeholder="Share your experience with this store..."
+                rows={6}
+                maxLength={500}
+                className="resize-none rounded-xl bg-slate-50/50 pb-8"
+              />
+              <div className="absolute bottom-3 right-3 text-xs text-muted-foreground">
+                {review.length} / 500
+              </div>
+            </div>
           </div>
 
-          <div className="flex gap-4">
-            <Button type="submit" disabled={loading || rating === 0}>
-              {loading ? "Submitting..." : existingRating ? "Update Rating" : "Submit Rating"}
-            </Button>
-            <Button type="button" variant="outline" onClick={() => router.back()}>
-              Cancel
-            </Button>
+          <div className="space-y-4 pt-2">
+            <div className="flex gap-4">
+              <Button type="submit" disabled={loading || rating === 0} className="w-full sm:w-auto px-8 rounded-xl h-11 bg-primary hover:bg-primary/90 text-white font-medium">
+                {loading ? "Submitting..." : existingRating ? "Update Rating" : "Submit Rating"}
+              </Button>
+              <Button type="button" variant="outline" onClick={() => router.back()} className="w-full sm:w-auto px-8 rounded-xl h-11">
+                Cancel
+              </Button>
+            </div>
+            
+            <div className="flex items-center gap-2 text-sm text-muted-foreground">
+              <Lock className="h-4 w-4 shrink-0" />
+              <span>Your review will be public and visible to all users.</span>
+            </div>
           </div>
         </form>
       </CardContent>

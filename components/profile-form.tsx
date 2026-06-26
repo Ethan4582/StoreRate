@@ -15,7 +15,7 @@ interface ProfileFormProps {
   user: User
 }
 
-export function ProfileForm({ user }: ProfileFormProps) {
+export function SettingsForm({ user }: ProfileFormProps) {
   const [formData, setFormData] = useState({
     name: user.name,
     email: user.email,
@@ -67,7 +67,7 @@ export function ProfileForm({ user }: ProfileFormProps) {
       const data = await response.json()
 
       if (response.ok) {
-        setMessage("Profile updated successfully")
+        setMessage("Settings updated successfully")
         setFormData({
           ...formData,
           currentPassword: "",
@@ -76,7 +76,7 @@ export function ProfileForm({ user }: ProfileFormProps) {
         })
         router.refresh()
       } else {
-        setError(data.error || "Failed to update profile")
+        setError(data.error || "Failed to update settings")
       }
     } catch (error) {
       setError("Network error. Please try again.")
@@ -85,110 +85,106 @@ export function ProfileForm({ user }: ProfileFormProps) {
     }
   }
 
-  const getRoleLabel = (role: string) => {
-    switch (role) {
-      case "system_admin":
-        return "System Administrator"
-      case "store_owner":
-        return "Store Owner"
-      case "normal_user":
-        return "Customer"
-      default:
-        return "User"
-    }
-  }
-
   return (
-    <Card>
-      <CardHeader>
-        <CardTitle>Account Information</CardTitle>
-        <CardDescription>Update your personal information and security settings</CardDescription>
-      </CardHeader>
-      <CardContent>
-        <form onSubmit={handleSubmit} className="space-y-6">
-          {message && (
-            <Alert>
-              <AlertDescription>{message}</AlertDescription>
-            </Alert>
-          )}
+    <form onSubmit={handleSubmit} className="space-y-8">
+      {message && (
+        <Alert className="bg-green-50 text-green-700 border-green-200">
+          <AlertDescription className="font-medium">{message}</AlertDescription>
+        </Alert>
+      )}
 
-          {error && (
-            <Alert variant="destructive">
-              <AlertDescription>{error}</AlertDescription>
-            </Alert>
-          )}
+      {error && (
+        <Alert variant="destructive">
+          <AlertDescription>{error}</AlertDescription>
+        </Alert>
+      )}
 
-          <div className="space-y-4">
+      {/* Personal Information Section */}
+      <Card className="rounded-2xl shadow-sm border-slate-200 overflow-hidden bg-white">
+        <CardHeader className="bg-slate-50/50 border-b border-slate-100 pb-4">
+          <CardTitle className="text-lg text-slate-900">Personal Information</CardTitle>
+          <CardDescription>Update your basic profile details</CardDescription>
+        </CardHeader>
+        <CardContent className="p-6 space-y-6">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <div className="space-y-2">
-              <Label htmlFor="role">Account Type</Label>
-              <Input id="role" value={getRoleLabel(user.role)} disabled className="bg-muted" />
-            </div>
-
-            <div className="space-y-2">
-              <Label htmlFor="name">Full Name</Label>
+              <Label htmlFor="name" className="text-slate-700 font-medium">Full Name</Label>
               <Input
                 id="name"
                 value={formData.name}
                 onChange={(e) => setFormData({ ...formData, name: e.target.value })}
                 required
+                className="h-11 bg-slate-50 border-slate-200 focus-visible:ring-blue-500"
               />
             </div>
 
             <div className="space-y-2">
-              <Label htmlFor="email">Email</Label>
+              <Label htmlFor="email" className="text-slate-700 font-medium">Email Address</Label>
               <Input
                 id="email"
                 type="email"
                 value={formData.email}
                 onChange={(e) => setFormData({ ...formData, email: e.target.value })}
                 required
+                className="h-11 bg-slate-50 border-slate-200 focus-visible:ring-blue-500"
               />
             </div>
           </div>
+        </CardContent>
+      </Card>
 
-          <div className="border-t pt-6">
-            <h3 className="text-lg font-medium mb-4">Change Password</h3>
-            <div className="space-y-4">
-              <div className="space-y-2">
-                <Label htmlFor="currentPassword">Current Password</Label>
-                <Input
-                  id="currentPassword"
-                  type="password"
-                  value={formData.currentPassword}
-                  onChange={(e) => setFormData({ ...formData, currentPassword: e.target.value })}
-                  placeholder="Enter current password"
-                />
-              </div>
-
-              <div className="space-y-2">
-                <Label htmlFor="newPassword">New Password</Label>
-                <Input
-                  id="newPassword"
-                  type="password"
-                  value={formData.newPassword}
-                  onChange={(e) => setFormData({ ...formData, newPassword: e.target.value })}
-                  placeholder="Enter new password"
-                />
-              </div>
-
-              <div className="space-y-2">
-                <Label htmlFor="confirmPassword">Confirm New Password</Label>
-                <Input
-                  id="confirmPassword"
-                  type="password"
-                  value={formData.confirmPassword}
-                  onChange={(e) => setFormData({ ...formData, confirmPassword: e.target.value })}
-                  placeholder="Confirm new password"
-                />
-              </div>
-            </div>
+      {/* Password & Security Section */}
+      <Card className="rounded-2xl shadow-sm border-slate-200 overflow-hidden bg-white">
+        <CardHeader className="bg-slate-50/50 border-b border-slate-100 pb-4">
+          <CardTitle className="text-lg text-slate-900">Password & Security</CardTitle>
+          <CardDescription>Keep your account secure by updating your password</CardDescription>
+        </CardHeader>
+        <CardContent className="p-6 space-y-6">
+          <div className="space-y-2 max-w-md">
+            <Label htmlFor="currentPassword" className="text-slate-700 font-medium">Current Password</Label>
+            <Input
+              id="currentPassword"
+              type="password"
+              value={formData.currentPassword}
+              onChange={(e) => setFormData({ ...formData, currentPassword: e.target.value })}
+              placeholder="Enter current password"
+              className="h-11 bg-slate-50 border-slate-200 focus-visible:ring-blue-500"
+            />
           </div>
 
-          <Button type="submit" disabled={loading}>
-            {loading ? "Updating..." : "Update Profile"}
-          </Button>
-        </form>
-      </CardContent>
-    </Card>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div className="space-y-2">
+              <Label htmlFor="newPassword" className="text-slate-700 font-medium">New Password</Label>
+              <Input
+                id="newPassword"
+                type="password"
+                value={formData.newPassword}
+                onChange={(e) => setFormData({ ...formData, newPassword: e.target.value })}
+                placeholder="Enter new password"
+                className="h-11 bg-slate-50 border-slate-200 focus-visible:ring-blue-500"
+              />
+            </div>
+
+            <div className="space-y-2">
+              <Label htmlFor="confirmPassword" className="text-slate-700 font-medium">Confirm New Password</Label>
+              <Input
+                id="confirmPassword"
+                type="password"
+                value={formData.confirmPassword}
+                onChange={(e) => setFormData({ ...formData, confirmPassword: e.target.value })}
+                placeholder="Confirm new password"
+                className="h-11 bg-slate-50 border-slate-200 focus-visible:ring-blue-500"
+              />
+            </div>
+          </div>
+        </CardContent>
+      </Card>
+
+      <div className="flex justify-end pt-4">
+        <Button type="submit" disabled={loading} className="bg-blue-600 hover:bg-blue-700 text-white h-11 px-8 font-medium">
+          {loading ? "Saving Changes..." : "Save Settings"}
+        </Button>
+      </div>
+    </form>
   )
 }
